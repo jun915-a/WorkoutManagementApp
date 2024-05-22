@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">WorkoutManagementApp</string>
+    <string name="edit_dialog_title">トレーニング内容</string>
+    <string name="body_part">部位</string>
+    <string name="training_event">種目</string>
+    <string name="rep_set_value">レップ数/セット数</string>
+    <string name="memo_title">メモ</string>
+    <string name="weight_title">体重</string>
+
+    <string name="name_empty_error">aa</string>
+    <string name="save_notion">aa</string>
+    <string name="edit_cancel_notion">aa</string>
+
+
+</resources>
