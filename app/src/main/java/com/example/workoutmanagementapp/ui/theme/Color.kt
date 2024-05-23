@@ -14,9 +14,6 @@ val Page_bg_color = Color(0xFF0E0E0E)
 val ItemBgColor = Color(0xFF1B1B1B)
 val DayTextColor = Color(0xFFFFFFFF)
 
-val BlockBgColor = Color(0xFF1B1B1B)
-
-
 
 //val Page_bg_color = Color(0xFF0E0E0E)
 //val ItemBgColor = Color(0xFF1B1B1B)

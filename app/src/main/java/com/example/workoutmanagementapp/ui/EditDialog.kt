@@ -24,6 +24,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,16 +43,28 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.R
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 
-val buiOptions =
-    listOf("胸", "上腕二頭筋", "上腕三頭筋", "肩", "背中", "腹筋", "足")
+//val buiOptions =
+//    listOf("胸", "二頭筋", "三頭筋", "肩", "背中", "腹筋", "足")
+val partList = listOf(
+    TrainingInfo.Chest.parts,
+    TrainingInfo.Biceps.parts,
+    TrainingInfo.Triceps.parts,
+    TrainingInfo.Shoulder.parts,
+    TrainingInfo.Back.parts,
+    TrainingInfo.Abdominal.parts,
+    TrainingInfo.Leg.parts,
+)
 
-val chest = listOf("ベンチプレス", "チェストプレス", "ダンベルフライ", "ダンベルプレス", "ケーブルクロス", "その他プレス", "その他フライ")
-//val biceps = listOf("ダンベルカール", "バーベルカール", "ケーブルカール", "プリーチャーカール")
-//val triceps = listOf("フレンチプレス", "ケーブルトライセプスEXT", "スカルクラッシャー")
-//val shoulder = listOf("ショルダープレス", "サイドレイズ", "リアレイズ", "フロントレイズ")
-//val back = listOf("ラットプルダウン", "懸垂", "ローイング", "デットリフト")
-//val abdominal = listOf("立ちコロ", "膝コロ", "上体起こし", "足上げ", "バイシクルクランチ", "プランク", "レッグレイズ", "デットバグ")
-//val leg = listOf("レッグプレス", "レッグEXT", "スクワット", "レッグカール", "サイドレイズ", "リアレイズ", "フロントレイズ", "カーフレイズ")
+val workoutMenuList = listOf(
+    TrainingInfo.Chest.workoutMenu,
+    TrainingInfo.Biceps.workoutMenu,
+    TrainingInfo.Triceps.workoutMenu,
+    TrainingInfo.Shoulder.workoutMenu,
+    TrainingInfo.Back.workoutMenu,
+    TrainingInfo.Abdominal.workoutMenu,
+    TrainingInfo.Leg.workoutMenu,
+
+    )
 
 fun getMonthList(): List<String> {
     return (1..12).map { it.toString() }
@@ -76,6 +89,8 @@ fun ShowEditDialog(
     context: Context,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    val selectedParts = remember { mutableStateOf("選択してください") }
+
     if (viewModel.showEditDialogFlg) {
         AlertDialog(
             modifier = Modifier
@@ -92,7 +107,7 @@ fun ShowEditDialog(
             },
             text = {
                 Column {
-                    var i by remember { mutableStateOf(1) }
+                    var i by remember { mutableStateOf(0) }
 
                     LazyColumn {
                         item {
@@ -103,13 +118,13 @@ fun ShowEditDialog(
 
                             //部位
                             Text(text = context.getString(R.string.body_part))
-                            Dropdown(buiOptions)
+                            PartsDropdown(partList, selectedParts)
                             Spacer(modifier = Modifier.height(10.dp))
                         }
 
                         items(i) {
                             //種目、レップ、セット
-                            AddTrainingMenu(context = context)
+                            AddTrainingMenu(context = context, selectedParts)
                             Spacer(modifier = Modifier.height(20.dp))
                         }
                         item {
@@ -215,33 +230,37 @@ fun ShowEditDialog(
 }
 
 @Composable
-fun AddTrainingMenu(context: Context) {
-    Text(text = context.getString(R.string.training_event))
-    Dropdown(chest)
+fun AddTrainingMenu(context: Context, selectedParts: MutableState<String>) {
+    if (selectedParts.value != "選択してください") {
+        Text(text = context.getString(R.string.training_event))
 
-    Spacer(modifier = Modifier.height(10.dp))
+        //When分で部位によって分岐
+        WorkoutMenuDropdown(WorkoutMenu.abdominalMenu)
 
-    Text(text = context.getString(R.string.rep_set_value))
-    TwoPullDown(Type.Rep)
+        Spacer(modifier = Modifier.height(10.dp))
 
-    Spacer(modifier = Modifier.height(10.dp))
+        Text(text = context.getString(R.string.rep_set_value))
+        TwoPullDown(Type.Rep)
+        Spacer(modifier = Modifier.height(10.dp))
+    }
 }
 
+
 @Composable
-fun Dropdown(options: List<String>) {
+fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) {
+
     var expanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("選択してください") }
     Column {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            options.forEach { option ->
+            partsList.forEach { parts ->
                 DropdownMenuItem(onClick = {
-                    selectedOption = option
+                    selectedParts.value = parts
                     expanded = false
                 }) {
-                    Text(text = option)
+                    Text(text = parts)
                 }
             }
         }
@@ -252,7 +271,47 @@ fun Dropdown(options: List<String>) {
                 .background(Color.White),
         ) {
             Text(
-                text = selectedOption,
+                text = selectedParts.value,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                painter = painterResource(id = android.R.drawable.arrow_down_float),
+                contentDescription = "",
+                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+            )
+        }
+    }
+}
+
+//種目
+@Composable
+fun WorkoutMenuDropdown(workoutMenu: List<String>) {
+    val selectedWorkout = remember { mutableStateOf("選択してください") }
+
+    var expanded by remember { mutableStateOf(false) }
+    Column {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            workoutMenu.forEach { workout ->
+                DropdownMenuItem(onClick = {
+                    selectedWorkout.value = workout
+                    expanded = false
+                }) {
+                    Text(text = workout)
+                }
+            }
+        }
+        TextButton(
+            onClick = { expanded = true },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+        ) {
+            Text(
+                text = selectedWorkout.value,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.weight(1f))

@@ -2,40 +2,69 @@ package com.example.workoutmanagementapp.ui
 
 import androidx.compose.ui.graphics.Color
 import com.example.workoutmanagementapp.R
-import java.time.LocalDateTime
+import java.time.LocalDate
 import java.time.YearMonth
 
-enum class TrainingMenuList(
-    trainingName: String,
-    color: Color,
-    image: Int,
-    val menu: String? = null
+class WorkoutMenu {
+    companion object {
+        var bicepsMenu: MutableList<String> = mutableListOf("ダンベルカール", "ハンマーカール")
+        var tricepsMenu: MutableList<String> = mutableListOf("フレンチプレス", "ディップス", "キックバック")
+        var shoulderMenu: MutableList<String> = mutableListOf("サイドレイズ", "ショルダープレス")
+        var chestMenu: MutableList<String> =
+            mutableListOf("ダンベルフライ", "ダンベルプレス", "チェストプレス", "ベンチプレス")
+        var abdominalMenu: MutableList<String> = mutableListOf(
+            "立ちコロ",
+            "膝コロ",
+            "レッグレイズ",
+            "バイシクルクランチ",
+            "プランク"
+        )
+        var backMenu: MutableList<String> = mutableListOf("懸垂", "ラットプルダウン")
+        var legMenu: MutableList<String> =
+            mutableListOf("スクワット", "レッグプレス", "レッグエクステンション", "レッグカール", "ブルガリアンスクワット")
+        var hamstringMenu: MutableList<String> = mutableListOf()
+    }
+}
+
+data class TrainingInfo(
+    val parts: String,
+    val color: Color,
+    val image: Int,
+    val workoutMenu: MutableList<String>
 ) {
-    Chest("胸", Color.Red, R.drawable.chest),
+    companion object {
+        val Chest = TrainingInfo("胸", Color.Red, R.drawable.chest, WorkoutMenu.chestMenu)
 
-    Biceps("二頭筋", Color.Yellow, R.drawable.biceps),
+        val Biceps = TrainingInfo("二頭筋", Color.Yellow, R.drawable.biceps, WorkoutMenu.bicepsMenu)
 
-    Triceps("三頭筋", Color.Magenta, R.drawable.triceps),
+        val Triceps =
+            TrainingInfo("三頭筋", Color.Magenta, R.drawable.triceps, WorkoutMenu.tricepsMenu)
 
-    Shoulder("肩", Color.Gray, R.drawable.shoulder),
+        val Shoulder = TrainingInfo("肩", Color.Gray, R.drawable.shoulder, WorkoutMenu.shoulderMenu)
 
-    Back("背中", Color.Blue, R.drawable.back),
+        val Back = TrainingInfo("背中", Color.Blue, R.drawable.back, WorkoutMenu.backMenu)
 
-    Abdominal("腹筋", Color.Green, R.drawable.abdominal),
+        val Abdominal =
+            TrainingInfo("腹筋", Color.Green, R.drawable.abdominal, WorkoutMenu.abdominalMenu)
 
-    Leg("足", Color.Cyan, R.drawable.leg),
+        val Leg = TrainingInfo("足", Color.Cyan, R.drawable.leg, WorkoutMenu.legMenu)
+    }
 }
 
-data class Training(val trainingMenu: TrainingMenu, ) {
-    data class TrainingMenu(
-        val trainingName: String,
-        val color: Color,
-        val image: Int,
-        val menu: String? = null,
-    )
-}
+data class TrainingMenu(
+    val time: LocalDate?,
+    val trainingInfo: TrainingInfo,
+    val trainingDetailList: List<TrainingDetail>,
+)
 
-fun generateTraining(): List<Training> = buildList {
+data class TrainingDetail(
+    val trainingName: String,
+    val set: Int,
+    val rep: Int
+)
+
+
+fun generateTraining(): List<TrainingMenu> = buildList {
     val currentMonth = YearMonth.now()
 
     //現在の月をマイナス、プラスで月を決めて日付を決めている使用方法
@@ -43,64 +72,98 @@ fun generateTraining(): List<Training> = buildList {
     //中の値を変えることで日付や表示アイテムを指定できる
     currentMonth.atDay(17).also { date ->
         add(
-            Training(
-                Training.TrainingMenu("胸", Color.Red, R.drawable.chest)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Chest,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
         add(
-            Training(
-                Training.TrainingMenu("二頭筋", Color.Yellow, R.drawable.biceps)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Triceps,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
     }
 
     currentMonth.atDay(22).also { date ->
         add(
-            Training(
-                Training.TrainingMenu("三頭筋", Color.Magenta, R.drawable.triceps)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Back,
+                listOf(
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", 2, 10),
+                )
+            )
         )
+
         add(
-            Training(
-                Training.TrainingMenu("三頭筋", Color.Magenta, R.drawable.triceps)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Biceps,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
     }
 
     currentMonth.atDay(3).also { date ->
         add(
-            Training(
-                Training.TrainingMenu("背中", Color.Blue, R.drawable.back)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Abdominal,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
     }
 
     currentMonth.atDay(12).also { date ->
         add(
-            Training(
-                Training.TrainingMenu("足", Color.Cyan, R.drawable.leg)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Shoulder,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
     }
 
     currentMonth.plusMonths(1).atDay(13).also { date ->
         add(
-            Training(
-                Training.TrainingMenu("腹筋", Color.Green, R.drawable.abdominal)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Leg,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
         add(
-            Training(
-                Training.TrainingMenu("背中", Color.Blue, R.drawable.back)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Triceps,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
     }
 
     currentMonth.minusMonths(1).atDay(9).also { date ->
         add(
-            Training(
-                Training.TrainingMenu("背中", Color.Blue, R.drawable.back)
-            ),
+            TrainingMenu(
+                date,
+                TrainingInfo.Triceps,
+                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+            )
         )
     }
+}
+
+val myTrainingDetailList: MutableList<TrainingDetail> = mutableListOf()
+
+fun makeTrainingDetail(workoutMenu: String, set: Int, rep: Int): MutableList<TrainingDetail> {
+    myTrainingDetailList.add(TrainingDetail(workoutMenu, set, rep))
+    return myTrainingDetailList
 }
