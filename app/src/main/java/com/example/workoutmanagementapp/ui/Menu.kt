@@ -22,7 +22,6 @@ class WorkoutMenu {
         var backMenu: MutableList<String> = mutableListOf("懸垂", "ラットプルダウン")
         var legMenu: MutableList<String> =
             mutableListOf("スクワット", "レッグプレス", "レッグエクステンション", "レッグカール", "ブルガリアンスクワット")
-        var hamstringMenu: MutableList<String> = mutableListOf()
     }
 }
 

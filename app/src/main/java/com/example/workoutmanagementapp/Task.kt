@@ -6,8 +6,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    var name: String,
-    var userId: String,
-    var password: String,
+    var date: String,//日付形式に変更
+    var trainingParts: String,
+    var trainingMenuSetRep: Triple<String, Int, Int>,
     var memo: String,
+    var weight: Float
 )

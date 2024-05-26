@@ -2,6 +2,7 @@ package com.example.workoutmanagementapp.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -43,8 +44,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.R
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 
-//val buiOptions =
-//    listOf("胸", "二頭筋", "三頭筋", "肩", "背中", "腹筋", "足")
 val partList = listOf(
     TrainingInfo.Chest.parts,
     TrainingInfo.Biceps.parts,
@@ -128,18 +127,18 @@ fun ShowEditDialog(
                             Spacer(modifier = Modifier.height(20.dp))
                         }
                         item {
-                            //種目の追加ボタン
-                            TextButton(
-                                onClick = {
-                                    i++
+                            if (selectedParts.value != "選択してください") {
+                                //種目の追加ボタン
+                                TextButton(
+                                    onClick = {
+                                        i++
+                                    }
+                                ) {
+                                    Text("種目の追加")
                                 }
-                            ) {
-                                Text("種目の追加")
                             }
-
                             Spacer(modifier = Modifier.height(10.dp))
 
-                            //種目の追加ボタン
                             Text(text = context.getString(R.string.memo_title))
                             val maxLength = 3
                             TextField(
@@ -231,18 +230,18 @@ fun ShowEditDialog(
 
 @Composable
 fun AddTrainingMenu(context: Context, selectedParts: MutableState<String>) {
-    if (selectedParts.value != "選択してください") {
-        Text(text = context.getString(R.string.training_event))
+//    if (selectedParts.value != "選択してください") {
+    Text(text = context.getString(R.string.training_event))
 
-        //When分で部位によって分岐
-        WorkoutMenuDropdown(WorkoutMenu.abdominalMenu)
+    //When分で部位によって分岐
+    WorkoutMenuDropdown(selectedParts)
 
-        Spacer(modifier = Modifier.height(10.dp))
+    Spacer(modifier = Modifier.height(10.dp))
 
-        Text(text = context.getString(R.string.rep_set_value))
-        TwoPullDown(Type.Rep)
-        Spacer(modifier = Modifier.height(10.dp))
-    }
+    Text(text = context.getString(R.string.rep_set_value))
+    TwoPullDown(Type.Rep)
+    Spacer(modifier = Modifier.height(10.dp))
+//    }
 }
 
 
@@ -286,21 +285,61 @@ fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) 
 
 //種目
 @Composable
-fun WorkoutMenuDropdown(workoutMenu: List<String>) {
-    val selectedWorkout = remember { mutableStateOf("選択してください") }
+fun WorkoutMenuDropdown(selectedParts: MutableState<String>) {
+    Log.d("test_log ${selectedParts.value}", "test_log ${selectedParts.value}")
+    val selectedWorkout =
+        if (selectedParts.value == "選択してください") remember { mutableStateOf("部位を選択してください") }
+        else remember { mutableStateOf("選択してください") }
 
     var expanded by remember { mutableStateOf(false) }
+
+    val workoutMenu: List<String> = when (selectedParts.value) {
+        TrainingInfo.Chest.parts -> {
+            TrainingInfo.Chest.workoutMenu
+        }
+
+        TrainingInfo.Biceps.parts -> {
+            TrainingInfo.Biceps.workoutMenu
+        }
+
+        TrainingInfo.Triceps.parts -> {
+            TrainingInfo.Triceps.workoutMenu
+        }
+
+        TrainingInfo.Shoulder.parts -> {
+            TrainingInfo.Shoulder.workoutMenu
+        }
+
+        TrainingInfo.Back.parts -> {
+            TrainingInfo.Back.workoutMenu
+        }
+
+        TrainingInfo.Abdominal.parts -> {
+            TrainingInfo.Abdominal.workoutMenu
+        }
+
+        TrainingInfo.Leg.parts -> {
+            TrainingInfo.Leg.workoutMenu
+        }
+
+        else -> {
+            listOf()
+        }
+    }
+
     Column {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            workoutMenu.forEach { workout ->
-                DropdownMenuItem(onClick = {
-                    selectedWorkout.value = workout
-                    expanded = false
-                }) {
-                    Text(text = workout)
+            if (selectedParts.value != "選択してください") {
+                workoutMenu.forEach { workout ->
+                    DropdownMenuItem(onClick = {
+                        selectedWorkout.value = workout
+                        expanded = false
+                    }) {
+                        Text(text = workout)
+                    }
                 }
             }
         }
@@ -443,12 +482,5 @@ fun TwoPullDown(type: Type) {
 @Composable
 @Preview
 fun Test() {
-    Row {
-        TextField(value = "aaa", onValueChange = {})
-//           modifier = Modifier
-//               .padding(10.dp))
-        Text("KG", modifier = Modifier.align(Alignment.Bottom))
-        Text("KG")
 
-    }
 }
