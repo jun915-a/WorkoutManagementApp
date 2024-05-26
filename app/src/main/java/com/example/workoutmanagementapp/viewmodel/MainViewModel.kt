@@ -26,20 +26,19 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
     var memo by mutableStateOf("")
     var weight by mutableStateOf("")
 
-
     val tasks = taskDao.loadAllTasks().distinctUntilChanged()
 
     fun insertTask(task: Task) {
         viewModelScope.launch {
             taskDao.insertTask(task)
-            Log.d("success_insertTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
+//            Log.d("success_insertTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
         }
     }
 
     fun updateTask(task: Task) {
         viewModelScope.launch {
             taskDao.updateTask(task)
-            Log.d("success_updateTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
+//            Log.d("success_updateTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
         }
     }
 
@@ -52,7 +51,7 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             taskDao.deleteTask(task)
-            Log.d("delete_updateTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
+//            Log.d("delete_updateTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
         }
     }
 }

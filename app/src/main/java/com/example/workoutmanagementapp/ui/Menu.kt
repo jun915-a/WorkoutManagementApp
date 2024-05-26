@@ -39,7 +39,8 @@ data class TrainingInfo(
         val Triceps =
             TrainingInfo("三頭筋", Color.Magenta, R.drawable.triceps, WorkoutMenu.tricepsMenu)
 
-        val Shoulder = TrainingInfo("肩", Color.Gray, R.drawable.shoulder, WorkoutMenu.shoulderMenu)
+        val Shoulder =
+            TrainingInfo("肩", Color.White, R.drawable.shoulder, WorkoutMenu.shoulderMenu)
 
         val Back = TrainingInfo("背中", Color.Blue, R.drawable.back, WorkoutMenu.backMenu)
 

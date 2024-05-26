@@ -136,7 +136,7 @@ fun CalendarScreen() {
                 state = state,
                 dayContent = { day ->
                     val colors = if (day.position == DayPosition.MonthDate) {
-                        trainings[day.date].orEmpty().map { Color.Yellow }
+                        trainings[day.date].orEmpty().map { it.trainingInfo.color }
                     } else {
                         emptyList()
                     }
