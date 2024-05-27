@@ -10,11 +10,15 @@ import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
 import kotlinx.coroutines.flow.filterNotNull
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
+fun getNowDate(): LocalDateTime? {
+    return LocalDateTime.now()
+}
 
 fun YearMonth.displayText(short: Boolean = false): String {
     return "${this.month.displayText(short = short)} ${this.year}"

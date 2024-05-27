@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.R
+import com.example.workoutmanagementapp.getNowDate
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 
 val partList = listOf(
@@ -376,11 +377,12 @@ fun DayOrRepPullDown(type: Type, viewModel: MainViewModel = hiltViewModel()) {
     var expanded by remember { mutableStateOf(false) }
     var expanded1 by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
-    var year = ""
-    var month = ""
-    var day = ""
+    val nowDate = getNowDate()
 
-    //todo カーソルあっていない時は現在日を表示
+    var year = nowDate?.year.toString()
+    var month = nowDate?.monthValue.toString()
+    var day = nowDate?.dayOfMonth.toString()
+
     if (viewModel.day.isNotEmpty()) {
         year = viewModel.day.substring(0, 4)
         month = viewModel.day.substring(5, 7)
