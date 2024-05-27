@@ -179,7 +179,7 @@ private fun Day(
             .aspectRatio(1f) // 正方形
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) Color.Blue else Color.Transparent,
+                color = if (isSelected) Color.Red else Color.Transparent,
             )
             .padding(1.dp)
             .background(color = ItemBgColor)
@@ -189,8 +189,11 @@ private fun Day(
                 onClick = { onClick(day) },
             ),
     ) {
+        val nowDay = getNowDate()?.toLocalDate()
         val textColor = when (day.position) {
-            DayPosition.MonthDate -> DayTextColor
+            DayPosition.MonthDate -> {
+                if (nowDay == day.date) Color.Red else DayTextColor
+            }
             DayPosition.InDate, DayPosition.OutDate -> Color.Gray
         }
         Text(
