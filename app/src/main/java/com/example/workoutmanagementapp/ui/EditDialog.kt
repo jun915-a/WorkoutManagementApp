@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -65,6 +66,10 @@ val workoutMenuList = listOf(
 
     )
 
+fun getYearList(): List<String> {
+    return (2024..2034).map { it.toString() }
+}
+
 fun getMonthList(): List<String> {
     return (1..12).map { it.toString() }
 }
@@ -112,7 +117,7 @@ fun ShowEditDialog(
                         item {
                             //日付
                             Text("日付")
-                            TwoPullDown(Type.Day)
+                            DayOrRepPullDown(Type.Day)
                             Spacer(modifier = Modifier.height(10.dp))
 
                             //部位
@@ -239,7 +244,7 @@ fun AddTrainingMenu(context: Context, selectedParts: MutableState<String>) {
     Spacer(modifier = Modifier.height(10.dp))
 
     Text(text = context.getString(R.string.rep_set_value))
-    TwoPullDown(Type.Rep)
+    DayOrRepPullDown(Type.Rep)
     Spacer(modifier = Modifier.height(10.dp))
 //    }
 }
@@ -286,7 +291,6 @@ fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) 
 //種目
 @Composable
 fun WorkoutMenuDropdown(selectedParts: MutableState<String>) {
-    Log.d("test_log ${selectedParts.value}", "test_log ${selectedParts.value}")
     val selectedWorkout =
         if (selectedParts.value == "選択してください") remember { mutableStateOf("部位を選択してください") }
         else remember { mutableStateOf("選択してください") }
@@ -368,16 +372,91 @@ enum class Type {
 }
 
 @Composable
-fun TwoPullDown(type: Type) {
+fun DayOrRepPullDown(type: Type, viewModel: MainViewModel = hiltViewModel()) {
+    var expanded by remember { mutableStateOf(false) }
     var expanded1 by remember { mutableStateOf(false) }
     var expanded2 by remember { mutableStateOf(false) }
-    var selectedOption1 by remember { mutableStateOf("0") }
-    var selectedOption2 by remember { mutableStateOf("0") }
+    var year = ""
+    var month = ""
+    var day = ""
 
+    //todo カーソルあっていない時は現在日を表示
+    if (viewModel.day.isNotEmpty()) {
+        year = viewModel.day.substring(0, 4)
+        month = viewModel.day.substring(5, 7)
+        day = viewModel.day.substring(8, 10)
+    }
+
+    var selectedOption by if (type == Type.Day && year.isNotEmpty()) remember {
+        mutableStateOf(
+            year
+        )
+    }
+    else remember { mutableStateOf("0") }
+
+    var selectedOption1 by if (type == Type.Day && month.isNotEmpty()) remember {
+        mutableStateOf(
+            month
+        )
+    }
+    else remember { mutableStateOf("0") }
+
+    var selectedOption2 by if (type == Type.Day && day.isNotEmpty()) remember {
+        mutableStateOf(
+            day
+        )
+    }
+    else remember { mutableStateOf("0") }
     Row(
-        modifier = Modifier.padding(12.dp),
+//        modifier = Modifier.padding(end = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        if (type == Type.Day) {
+            //年
+            Column {
+                TextButton(
+                    onClick = { expanded = true },
+                    modifier = Modifier
+                        .background(Color.White)
+                ) {
+                    Text(
+                        selectedOption
+//                        modifier = Modifier
+//                            .padding(end = 10.dp))
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Icon(
+                        painter = painterResource(id = android.R.drawable.arrow_down_float),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(6.dp)
+                            .wrapContentWidth(Alignment.End)//右寄せ
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    getYearList().forEach { option ->
+                        DropdownMenuItem(onClick = {
+                            selectedOption = option
+                            expanded = false
+                        }) {
+                            Text(option)
+                        }
+                    }
+                }
+            }
+            Text(
+                text = "年",
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.weight(0.1f))
+        }
+
+        //月・レップ
         Column(
             modifier = Modifier
                 .weight(1f),
@@ -387,11 +466,13 @@ fun TwoPullDown(type: Type) {
                 modifier = Modifier.background(Color.White)
             ) {
                 Text(selectedOption1)
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
-                    modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                    modifier = Modifier
+                        .size(6.dp)
+                        .wrapContentWidth(Alignment.End)//右寄せ
                 )
             }
 
@@ -422,10 +503,13 @@ fun TwoPullDown(type: Type) {
         }
         Text(
             text = if (type == Type.Day) "月" else "レップ",
-            modifier = Modifier
-                .padding(horizontal = 10.dp),
+//            modifier = Modifier
+//                .padding(horizontal = 10.dp),
             textAlign = TextAlign.Center,
         )
+        Spacer(modifier = Modifier.weight(0.1f))
+
+        //日・セット
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -437,11 +521,13 @@ fun TwoPullDown(type: Type) {
 
                 ) {
                 Text(selectedOption2)
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
-                    modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                    modifier = Modifier
+                        .size(6.dp)
+                        .wrapContentWidth(Alignment.End)//右寄せ
                 )
             }
             DropdownMenu(
@@ -471,10 +557,11 @@ fun TwoPullDown(type: Type) {
         }
         Text(
             text = if (type == Type.Day) "日" else "セット",
-            modifier = Modifier
-                .padding(horizontal = 10.dp),
+//            modifier = Modifier
+//                .padding(horizontal = 10.dp),
             textAlign = TextAlign.End
         )
+        Spacer(modifier = Modifier.weight(0.1f))
     }
 }
 

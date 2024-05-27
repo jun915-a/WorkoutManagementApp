@@ -79,7 +79,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(viewModel: MainViewModel = hiltViewModel()) {
     val trainings = generateTraining().groupBy { it.time }
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
@@ -145,6 +145,7 @@ fun CalendarScreen() {
                         isSelected = selection == day,
                         colors = colors,
                     ) { clicked ->
+                        viewModel.day = day.date.toString()
                         selection = clicked
                     }
                 },

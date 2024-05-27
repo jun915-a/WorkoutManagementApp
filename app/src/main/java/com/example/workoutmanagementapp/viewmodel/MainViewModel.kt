@@ -1,6 +1,5 @@
 package com.example.workoutmanagementapp.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
     var id by mutableIntStateOf(0)
     var memo by mutableStateOf("")
     var weight by mutableStateOf("")
+    var day by mutableStateOf("")
 
     val tasks = taskDao.loadAllTasks().distinctUntilChanged()
 
