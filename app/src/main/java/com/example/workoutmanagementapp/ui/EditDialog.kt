@@ -296,7 +296,9 @@ fun saveTask(viewModel: MainViewModel) {
     val obj = TrainingMenuDatabase(
         LocalDate.now(),
         viewModel.parts,
-        trainingDetail
+        trainingDetail,
+        viewModel.memo,
+        viewModel.weight
     )
     val jsonStr = viewModel.toJson(obj)
     viewModel.insertTask(Task(1, jsonStr))

@@ -61,6 +61,8 @@ data class TrainingMenuDatabase(
     val time: LocalDate?,
     val parts: String,
     val trainingDetailList: List<TrainingDetail>,
+    val memo: String,
+    val weight: String
 )
 
 data class TrainingDetail(

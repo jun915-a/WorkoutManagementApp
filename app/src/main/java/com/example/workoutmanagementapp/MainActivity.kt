@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
         val obj = TrainingMenuDatabase(
             LocalDate.now(),
             "parts",
-            listOf(TrainingDetail("a", "1", "1"))
+            listOf(TrainingDetail("a", "1", "1")), "", ""
         )
         insertTask(obj = obj)
 
