@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.workoutmanagementapp.Task
 import com.example.workoutmanagementapp.TaskDao
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -15,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewModel() {
-    //TODO このApp仕様にする
 
     var showDeleteDialogFlg by mutableStateOf(false)
     var showEditDialogFlg by mutableStateOf(false)
@@ -53,5 +53,15 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
             taskDao.deleteTask(task)
 //            Log.d("delete_updateTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
         }
+    }
+
+    // オブジェクトをJSON文字列に変換する
+    fun toJson(obj: Any): String {
+        return Gson().toJson(obj)
+    }
+
+    // JSON文字列をオブジェクトに変換する
+    inline fun <reified T> fromJson(json: String): T {
+        return Gson().fromJson(json, T::class.java)
     }
 }

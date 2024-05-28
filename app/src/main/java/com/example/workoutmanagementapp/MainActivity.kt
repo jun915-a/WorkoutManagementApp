@@ -6,15 +6,21 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.workoutmanagementapp.ui.CalendarDisplay
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.ui.ShowEditDialog
+import com.example.workoutmanagementapp.ui.TrainingDetail
+import com.example.workoutmanagementapp.ui.TrainingInfo
+import com.example.workoutmanagementapp.ui.TrainingMenu
 import com.example.workoutmanagementapp.ui.theme.WorkoutManagementAppTheme
+import com.example.workoutmanagementapp.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.coroutines.coroutineContext
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -29,16 +35,43 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainScreen()
                     ShowEditDialog(context = this)
+                    samplePlay()
                 }
             }
         }
     }
-}
-//test
 
-@Preview
-@Composable
-fun Previewa(){
-    MainScreen()
-}
+    @Composable
+    fun getTaskList(viewModel: MainViewModel = hiltViewModel()): MutableList<TrainingMenu> {
+        val tasks: List<Task> by viewModel.tasks.collectAsState(initial = emptyList())
+        val trainingMenuList: MutableList<TrainingMenu> = mutableListOf()
+        for (i in tasks) {
+            trainingMenuList.add(viewModel.fromJson(i.jsonStr))
+        }
+        return trainingMenuList
+    }
 
+    @Composable
+    fun insertTask(obj: TrainingMenu, viewModel: MainViewModel = hiltViewModel()) {
+        val jsonStr = viewModel.toJson(obj)
+        viewModel.insertTask(Task(1, jsonStr))
+    }
+
+    @Composable
+    fun samplePlay() {
+        val obj = TrainingMenu(
+            LocalDate.now(),
+            TrainingInfo("parts", Color.Blue, R.drawable.abdominal, mutableListOf("ss")),
+            listOf(TrainingDetail("a", 1, 1))
+        )
+        insertTask(obj = obj)
+
+        val test = getTaskList()
+        for (i in test) {
+            println("test_logA ${i.trainingInfo.parts}  ${i}")
+            for (a in i.trainingDetailList) {
+                println("test_logC ${a}")
+            }
+        }
+    }
+}
