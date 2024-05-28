@@ -27,9 +27,9 @@ class WorkoutMenu {
 
 data class TrainingInfo(
     val parts: String,
-    val color: Color,
-    val image: Int,
-    val workoutMenu: MutableList<String>
+    val color: Color?,
+    val image: Int?,
+    val workoutMenu: MutableList<String>,
 ) {
     companion object {
         val Chest = TrainingInfo("胸", Color.Red, R.drawable.chest, WorkoutMenu.chestMenu)
@@ -57,10 +57,16 @@ data class TrainingMenu(
     val trainingDetailList: List<TrainingDetail>,
 )
 
+data class TrainingMenuDatabase(
+    val time: LocalDate?,
+    val parts: String,
+    val trainingDetailList: List<TrainingDetail>,
+)
+
 data class TrainingDetail(
     val trainingName: String,
-    val set: Int,
-    val rep: Int
+    val set: String,
+    val rep: String
 )
 
 
@@ -75,14 +81,14 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Chest,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
         add(
             TrainingMenu(
                 date,
                 TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
     }
@@ -93,13 +99,10 @@ fun generateTraining(): List<TrainingMenu> = buildList {
                 date,
                 TrainingInfo.Back,
                 listOf(
-                    TrainingDetail("ダンベルフライ", 2, 10),
-                    TrainingDetail("ダンベルフライ", 2, 10),
-                    TrainingDetail("ダンベルフライ", 2, 10),
-                    TrainingDetail("ダンベルフライ", 2, 10),
-                    TrainingDetail("ダンベルフライ", 2, 10),
-                    TrainingDetail("ダンベルフライ", 2, 10),
-                    TrainingDetail("ダンベルフライ", 2, 10),
+                    TrainingDetail("ダンベルフライ", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "2", "10"),
                 )
             )
         )
@@ -108,7 +111,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Biceps,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
     }
@@ -118,7 +121,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Abdominal,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
     }
@@ -128,7 +131,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Shoulder,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
     }
@@ -138,14 +141,14 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Leg,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
         add(
             TrainingMenu(
                 date,
                 TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
     }
@@ -155,7 +158,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", 2, 10))
+                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
             )
         )
     }
@@ -163,7 +166,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
 
 val myTrainingDetailList: MutableList<TrainingDetail> = mutableListOf()
 
-fun makeTrainingDetail(workoutMenu: String, set: Int, rep: Int): MutableList<TrainingDetail> {
+fun makeTrainingDetail(workoutMenu: String, set: String, rep: String): MutableList<TrainingDetail> {
     myTrainingDetailList.add(TrainingDetail(workoutMenu, set, rep))
     return myTrainingDetailList
 }

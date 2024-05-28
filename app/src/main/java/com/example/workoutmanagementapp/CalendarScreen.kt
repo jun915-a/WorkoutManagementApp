@@ -171,7 +171,7 @@ fun CalendarScreen(viewModel: MainViewModel = hiltViewModel()) {
 private fun Day(
     day: CalendarDay,
     isSelected: Boolean = false,
-    colors: List<Color> = emptyList(),
+    colors: List<Color?> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
     Box(
@@ -194,6 +194,7 @@ private fun Day(
             DayPosition.MonthDate -> {
                 if (nowDay == day.date) Color.Red else DayTextColor
             }
+
             DayPosition.InDate, DayPosition.OutDate -> Color.Gray
         }
         Text(
@@ -216,7 +217,7 @@ private fun Day(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(5.dp)
-                        .background(color),
+                        .background(color!!),
                 )
             }
         }
@@ -253,7 +254,7 @@ private fun LazyItemScope.TrainingInformation(trainingMenu: TrainingMenu) {
     ) {
         Box(
             modifier = Modifier
-                .background(color = trainingMenu.trainingInfo.color)
+                .background(color = trainingMenu.trainingInfo.color!!)
                 .width(10.dp)
                 .fillMaxHeight()
                 .aspectRatio(1f),
@@ -315,7 +316,7 @@ fun bottomList(training: TrainingMenu) {
             contentAlignment = Alignment.CenterEnd,
         ) {
             Image(
-                painter = painterResource(id = training.trainingInfo.image),
+                painter = painterResource(id = training.trainingInfo.image!!),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight()

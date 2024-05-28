@@ -16,22 +16,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewModel() {
-
-    var showDeleteDialogFlg by mutableStateOf(false)
     var showEditDialogFlg by mutableStateOf(false)
-    var showProgressBarFlg by mutableStateOf(false)
+//    var showDeleteDialogFlg by mutableStateOf(false)
+//    var showProgressBarFlg by mutableStateOf(false)
 
     var id by mutableIntStateOf(0)
     var memo by mutableStateOf("")
     var weight by mutableStateOf("")
     var day by mutableStateOf("")
 
+    var parts by mutableStateOf("")
+    var trainingName: MutableList<String> = mutableListOf()
+    var rep: MutableList<String> = mutableListOf()
+    var set: MutableList<String> = mutableListOf()
+
+
     val tasks = taskDao.loadAllTasks().distinctUntilChanged()
 
     fun insertTask(task: Task) {
         viewModelScope.launch {
             taskDao.insertTask(task)
-//            Log.d("success_insertTask", "${task.id} ${task.name} ${task.userId} ${task.password}")
+            println("success_test_log ${task.jsonStr} }")
         }
     }
 

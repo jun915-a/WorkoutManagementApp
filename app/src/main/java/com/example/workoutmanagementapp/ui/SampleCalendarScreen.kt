@@ -103,7 +103,7 @@ fun Day(day: CalendarDay, isNowDate: Boolean) {
                 Color.Gray
             },
             modifier = Modifier.clickable {
-                Log.d("test_log", "test ${day.date.dayOfMonth.toString()}")
+//                Log.d("test_log", "test ${day.date.dayOfMonth.toString()}")
             }
         )
     }
