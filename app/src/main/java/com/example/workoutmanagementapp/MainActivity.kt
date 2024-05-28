@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun samplePlay() {
         val obj = TrainingMenuDatabase(
-            LocalDate.now(),
+            "2024-04-01",
             "parts",
             listOf(TrainingDetail("a", "1", "1")), "", ""
         )

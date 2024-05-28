@@ -1,2 +1,2 @@
 
-TODO:次やること　保存の際の日付型
+TODO:次やること　Roomへの日付の保存はString　Roomから取得した後にLocalDate.parseで変換する

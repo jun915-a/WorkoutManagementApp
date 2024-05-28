@@ -58,7 +58,7 @@ data class TrainingMenu(
 )
 
 data class TrainingMenuDatabase(
-    val time: LocalDate?,
+    val time: String,
     val parts: String,
     val trainingDetailList: List<TrainingDetail>,
     val memo: String,

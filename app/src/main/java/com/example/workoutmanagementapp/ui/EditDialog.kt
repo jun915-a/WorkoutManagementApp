@@ -46,7 +46,6 @@ import com.example.workoutmanagementapp.Task
 import com.example.workoutmanagementapp.addOrReplace
 import com.example.workoutmanagementapp.getNowDate
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
-import java.time.LocalDate
 
 val partList = listOf(
     TrainingInfo.Chest.parts,
@@ -98,37 +97,24 @@ fun ShowEditDialog(
             localMonth = viewModel.day.substring(5, 7)
             localDay = viewModel.day.substring(8, 10)
         }
-
         //年
-        val selectedYear = if (localYear.isNotEmpty()) remember {
+        val selectedYear = remember {
             mutableStateOf(
                 localYear
-            )
-        } else remember {
-            mutableStateOf(
-                "0"
             )
         }
 
         //月
-        val selectedMonth = if (localMonth.isNotEmpty()) remember {
+        val selectedMonth = remember {
             mutableStateOf(
                 localMonth
-            )
-        } else remember {
-            mutableStateOf(
-                "0"
             )
         }
 
         //日
-        val selectedDay = if (localDay.isNotEmpty()) remember {
+        val selectedDay = remember {
             mutableStateOf(
                 localDay
-            )
-        } else remember {
-            mutableStateOf(
-                "0"
             )
         }
 
@@ -247,7 +233,10 @@ fun ShowEditDialog(
                                 //登録処理
 //                                viewModel.updateTask(task)
 
-                                println("test_log 日付：${selectedYear.value} ${selectedMonth.value} ${selectedDay.value} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
+                                viewModel.dataBaseDay =
+                                    selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
+
+                                println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
                                 saveTask(viewModel)
 
                                 viewModel.showEditDialogFlg = false
@@ -294,7 +283,7 @@ fun saveTask(viewModel: MainViewModel) {
         )
     }
     val obj = TrainingMenuDatabase(
-        LocalDate.now(),
+        viewModel.dataBaseDay,
         viewModel.parts,
         trainingDetail,
         viewModel.memo,
@@ -305,13 +294,9 @@ fun saveTask(viewModel: MainViewModel) {
 }
 
 @Composable
-//fun AddTrainingMenu(context: Context, selectedParts: MutableState<String>, count: Int) {
 fun AddTrainingMenu(
     context: Context,
     selectedParts: MutableState<String>,
-//    selectedRep: MutableState<String>,
-//    selectedSet: MutableState<String>,
-//    selectedWorkout: MutableState<String>,
     count: Int,
 ) {
     Text(text = context.getString(R.string.training_event))
@@ -366,12 +351,9 @@ fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) 
     }
 }
 
-val workoutList: MutableList<TrainingDetail> = mutableListOf<TrainingDetail>()
-
 //種目
 @Composable
 fun WorkoutMenuDropdown(
-//    selectedWorkout: MutableState<String>,
     selectedParts: MutableState<String>,
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
@@ -386,7 +368,6 @@ fun WorkoutMenuDropdown(
         count - 1,
         selectedWorkout.value
     )
-    println("test_log!! ${selectedParts.value} ${TrainingInfo.Chest.workoutMenu}")
     val workoutMenu: List<String> = when (selectedParts.value) {
         TrainingInfo.Chest.parts -> {
             TrainingInfo.Chest.workoutMenu
@@ -594,8 +575,6 @@ fun DayPullDown(
 
 @Composable
 fun repSetPullDown(
-//    selectedRep: MutableState<String>,
-//    selectedSet: MutableState<String>,
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
