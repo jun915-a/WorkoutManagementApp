@@ -73,6 +73,10 @@ fun getRepList(): List<String> {
     return (1..50).map { it.toString() }
 }
 
+fun getWeightList(): List<String> {
+    return (1..200).map { it.toString() }
+}
+
 fun getSetList(): List<String> {
     return (1..10).map { it.toString() }
 }
@@ -124,7 +128,7 @@ fun ShowEditDialog(
 
         AlertDialog(
             modifier = Modifier
-                .padding(horizontal = 10.dp),
+                .padding(horizontal = 4.dp),
             onDismissRequest = {
                 viewModel.showEditDialogFlg = false
             },
@@ -197,10 +201,10 @@ fun ShowEditDialog(
                                     modifier = Modifier
                                         .width(80.dp),
                                     singleLine = true,
-                                    value = viewModel.weight,
+                                    value = viewModel.bodyWeight,
                                     onValueChange = { newValue ->
                                         if (newValue.all { it.isDigit() } && newValue.length <= maxLength) {
-                                            viewModel.weight = newValue
+                                            viewModel.bodyWeight = newValue
                                         }
                                     },
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -236,6 +240,7 @@ fun ShowEditDialog(
                                 viewModel.dataBaseDay =
                                     selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
 
+                                viewModel.parts = selectedParts.value
                                 println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
                                 saveTask(viewModel)
 
@@ -277,6 +282,7 @@ fun saveTask(viewModel: MainViewModel) {
         trainingDetail.add(
             TrainingDetail(
                 viewModel.trainingName[i],
+                viewModel.weight[i],
                 viewModel.set[i],
                 viewModel.rep[i]
             )
@@ -287,7 +293,7 @@ fun saveTask(viewModel: MainViewModel) {
         viewModel.parts,
         trainingDetail,
         viewModel.memo,
-        viewModel.weight
+        viewModel.bodyWeight
     )
     val jsonStr = viewModel.toJson(obj)
     viewModel.insertTask(Task(1, jsonStr))
@@ -578,15 +584,24 @@ fun repSetPullDown(
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    //weight
+    val selectedWeight = remember { mutableStateOf("0") }
+
     //rep
     val selectedRep = remember { mutableStateOf("0") }
 
     //set
     val selectedSet = remember { mutableStateOf("0") }
 
+    var expandedWeight by remember { mutableStateOf(false) }
     var expandedRep by remember { mutableStateOf(false) }
     var expandedSet by remember { mutableStateOf(false) }
 
+    addOrReplace(
+        viewModel.weight,
+        count - 1,
+        selectedWeight.value
+    )
     addOrReplace(
         viewModel.rep,
         count - 1,
@@ -601,7 +616,43 @@ fun repSetPullDown(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        //月・レップ
+        //重量
+        Column(
+            modifier = Modifier
+                .weight(1f),
+        ) {
+            TextButton(
+                onClick = { expandedWeight = true },
+                modifier = Modifier.background(Color.White)
+            ) {
+                Text(selectedWeight.value)
+                Spacer(modifier = Modifier.weight(0.1f))
+                Icon(
+                    painter = painterResource(id = android.R.drawable.arrow_down_float),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(6.dp)
+                        .wrapContentWidth(Alignment.End)//右寄せ
+                )
+            }
+
+            DropdownMenu(
+                expanded = expandedWeight,
+                onDismissRequest = { expandedWeight = false }
+            ) {
+                getWeightList().forEach { option ->
+                    DropdownMenuItem(onClick = {
+                        selectedWeight.value = option
+                        expandedWeight = false
+                    }) {
+                        Text(option)
+                    }
+                }
+            }
+        }
+        Text(text = "kg", textAlign = TextAlign.Center, fontSize = 12.sp)
+        Spacer(modifier = Modifier.weight(0.1f))
+        //レップ
         Column(
             modifier = Modifier
                 .weight(1f),
@@ -635,7 +686,7 @@ fun repSetPullDown(
                 }
             }
         }
-        Text(text = "レップ", textAlign = TextAlign.Center)
+        Text(text = "レップ", textAlign = TextAlign.Center, fontSize = 12.sp)
         Spacer(modifier = Modifier.weight(0.1f))
 
         //日・セット
@@ -675,7 +726,8 @@ fun repSetPullDown(
         }
         Text(
             text = "セット",
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
+            fontSize = 12.sp
         )
         Spacer(modifier = Modifier.weight(0.1f))
     }

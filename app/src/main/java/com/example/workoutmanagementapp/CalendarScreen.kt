@@ -384,7 +384,17 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
             fontWeight = FontWeight.Black,
             color = DayTextColor
         )
-
+        Text(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+//                    .fillMaxWidth()
+            ,
+            text = "${trainingDetail.weight}セット",
+            textAlign = TextAlign.Center,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Black,
+            color = DayTextColor
+        )
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

@@ -22,12 +22,13 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
 
     var id by mutableIntStateOf(0)
     var memo by mutableStateOf("")
-    var weight by mutableStateOf("")
+    var bodyWeight by mutableStateOf("")
     var day by mutableStateOf("")
     var dataBaseDay by mutableStateOf("")
 
     var parts by mutableStateOf("")
     var trainingName: MutableList<String> = mutableListOf()
+    var weight: MutableList<String> = mutableListOf()
     var rep: MutableList<String> = mutableListOf()
     var set: MutableList<String> = mutableListOf()
 

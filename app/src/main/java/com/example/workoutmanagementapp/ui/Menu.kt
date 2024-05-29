@@ -62,11 +62,12 @@ data class TrainingMenuDatabase(
     val parts: String,
     val trainingDetailList: List<TrainingDetail>,
     val memo: String,
-    val weight: String
+    val bodyWeight: String
 )
 
 data class TrainingDetail(
     val trainingName: String,
+    val weight: String,
     val set: String,
     val rep: String
 )
@@ -83,14 +84,14 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Chest,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
         add(
             TrainingMenu(
                 date,
                 TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
     }
@@ -101,10 +102,10 @@ fun generateTraining(): List<TrainingMenu> = buildList {
                 date,
                 TrainingInfo.Back,
                 listOf(
-                    TrainingDetail("ダンベルフライ", "2", "10"),
-                    TrainingDetail("ダンベルフライ", "2", "10"),
-                    TrainingDetail("ダンベルフライ", "2", "10"),
-                    TrainingDetail("ダンベルフライ", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
                 )
             )
         )
@@ -113,7 +114,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Biceps,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
     }
@@ -123,7 +124,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Abdominal,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
     }
@@ -133,7 +134,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Shoulder,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
     }
@@ -143,14 +144,14 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Leg,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
         add(
             TrainingMenu(
                 date,
                 TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
     }
@@ -160,7 +161,7 @@ fun generateTraining(): List<TrainingMenu> = buildList {
             TrainingMenu(
                 date,
                 TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", "2", "10"))
+                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
             )
         )
     }
@@ -168,7 +169,12 @@ fun generateTraining(): List<TrainingMenu> = buildList {
 
 val myTrainingDetailList: MutableList<TrainingDetail> = mutableListOf()
 
-fun makeTrainingDetail(workoutMenu: String, set: String, rep: String): MutableList<TrainingDetail> {
-    myTrainingDetailList.add(TrainingDetail(workoutMenu, set, rep))
+fun makeTrainingDetail(
+    workoutMenu: String,
+    weight: String,
+    set: String,
+    rep: String
+): MutableList<TrainingDetail> {
+    myTrainingDetailList.add(TrainingDetail(workoutMenu, weight, set, rep))
     return myTrainingDetailList
 }

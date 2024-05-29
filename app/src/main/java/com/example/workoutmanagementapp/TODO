@@ -1,2 +1,3 @@
 
 TODO:次やること　Roomへの日付の保存はString　Roomから取得した後にLocalDate.parseで変換する
+kg入力欄追加

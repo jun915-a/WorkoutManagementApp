@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 @Entity
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val jsonStr:String
+    val jsonStr: String
 )
