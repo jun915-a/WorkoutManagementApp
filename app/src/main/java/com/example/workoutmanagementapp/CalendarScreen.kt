@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.ui.TrainingDetail
 import com.example.workoutmanagementapp.ui.TrainingMenu
+import com.example.workoutmanagementapp.ui.TrainingMenuDatabase
 import com.example.workoutmanagementapp.ui.generateTraining
 import com.example.workoutmanagementapp.ui.theme.DayTextColor
 import com.example.workoutmanagementapp.ui.theme.ItemBgColor
@@ -59,7 +60,10 @@ import java.time.YearMonth
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
+fun MainScreen(
+    tasks: MutableList<TrainingMenuDatabase>,
+    viewModel: MainViewModel = hiltViewModel()
+) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -73,14 +77,17 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
             }
         },
         content = {
-            CalendarScreen()
+            CalendarScreen(tasks)
         }
     )
 }
 
 @Composable
-fun CalendarScreen(viewModel: MainViewModel = hiltViewModel()) {
-    val trainings = generateTraining().groupBy { it.time }
+fun CalendarScreen(
+    tasks: MutableList<TrainingMenuDatabase>,
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    val trainings = generateTraining(tasks).groupBy { it.time }
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }

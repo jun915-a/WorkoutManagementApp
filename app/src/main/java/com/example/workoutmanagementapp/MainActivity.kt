@@ -17,7 +17,6 @@ import com.example.workoutmanagementapp.ui.TrainingMenuDatabase
 import com.example.workoutmanagementapp.ui.theme.WorkoutManagementAppTheme
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDate
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,13 +29,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    val tasks = getTaskList()
+                    for (i in tasks) {
+                        println("test_log_起動時取得データ 日付：${i.date} 部位：${i.parts} 体重：${i.bodyWeight} メモ：${i.memo} ")
+                        for (detail in i.trainingDetailList) {
+                            println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
+                        }
+                    }
+                    MainScreen(tasks)
                     ShowEditDialog(context = this)
-//                    samplePlay()
-//                    val taskList = getTaskList()
-//                    for (i in taskList){
-//                        println("test_log Get ${i.trainingInfo}")
-//                    }
                 }
             }
         }
@@ -63,15 +64,15 @@ class MainActivity : ComponentActivity() {
         val obj = TrainingMenuDatabase(
             "2024-04-01",
             "parts",
-            listOf(TrainingDetail("a", "60","1", "1")), "", ""
+            listOf(TrainingDetail("a", "60", "1", "1")), "", ""
         )
         insertTask(obj = obj)
 
         val test = getTaskList()
         for (i in test) {
-//            println("test_logA ${i.trainingInfo.parts}  ${i}")
-            for (a in i.trainingDetailList) {
-//                println("test_logC ${a}")
+            println("test_log_起動時取得データ 日付：${i.date} 部位：${i.parts} 体重：${i.bodyWeight} メモ：${i.memo} ")
+            for (detail in i.trainingDetailList) {
+                println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
             }
         }
     }

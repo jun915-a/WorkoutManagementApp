@@ -3,7 +3,7 @@ package com.example.workoutmanagementapp.ui
 import androidx.compose.ui.graphics.Color
 import com.example.workoutmanagementapp.R
 import java.time.LocalDate
-import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 class WorkoutMenu {
     companion object {
@@ -48,6 +48,9 @@ data class TrainingInfo(
             TrainingInfo("腹筋", Color.Green, R.drawable.abdominal, WorkoutMenu.abdominalMenu)
 
         val Leg = TrainingInfo("足", Color.Cyan, R.drawable.leg, WorkoutMenu.legMenu)
+
+        val Other = TrainingInfo("その他", Color.Black, null, mutableListOf())
+
     }
 }
 
@@ -58,7 +61,7 @@ data class TrainingMenu(
 )
 
 data class TrainingMenuDatabase(
-    val time: String,
+    val date: String,
     val parts: String,
     val trainingDetailList: List<TrainingDetail>,
     val memo: String,
@@ -72,109 +75,129 @@ data class TrainingDetail(
     val rep: String
 )
 
+fun generateTraining(tasks: MutableList<TrainingMenuDatabase>): List<TrainingMenu> = buildList {
+//    val dateList = mutableListOf<LocalDate>()
 
-fun generateTraining(): List<TrainingMenu> = buildList {
-    val currentMonth = YearMonth.now()
+    for (task in tasks) {
+        val trainingInfo = checkParts(task.parts)
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
+        val date = LocalDate.parse(task.date, inputFormatter)
 
-    //現在の月をマイナス、プラスで月を決めて日付を決めている使用方法
-    //TODO:ここをRoomで保存、管理
-    //中の値を変えることで日付や表示アイテムを指定できる
-    currentMonth.atDay(17).also { date ->
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Chest,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-    }
-
-    currentMonth.atDay(22).also { date ->
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Back,
-                listOf(
-                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
-                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
-                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
-                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+        date.also { it ->
+            add(
+                TrainingMenu(
+                    it,
+                    trainingInfo,
+                    task.trainingDetailList
                 )
             )
-        )
-
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Biceps,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-    }
-
-    currentMonth.atDay(3).also { date ->
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Abdominal,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-    }
-
-    currentMonth.atDay(12).also { date ->
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Shoulder,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-    }
-
-    currentMonth.plusMonths(1).atDay(13).also { date ->
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Leg,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
-    }
-
-    currentMonth.minusMonths(1).atDay(9).also { date ->
-        add(
-            TrainingMenu(
-                date,
-                TrainingInfo.Triceps,
-                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
-            )
-        )
+        }
     }
 }
 
-val myTrainingDetailList: MutableList<TrainingDetail> = mutableListOf()
-
-fun makeTrainingDetail(
-    workoutMenu: String,
-    weight: String,
-    set: String,
-    rep: String
-): MutableList<TrainingDetail> {
-    myTrainingDetailList.add(TrainingDetail(workoutMenu, weight, set, rep))
-    return myTrainingDetailList
+fun checkParts(parts: String): TrainingInfo {
+    return when (parts) {
+        TrainingInfo.Chest.parts -> TrainingInfo.Chest
+        TrainingInfo.Biceps.parts -> TrainingInfo.Biceps
+        TrainingInfo.Triceps.parts -> TrainingInfo.Triceps
+        TrainingInfo.Shoulder.parts -> TrainingInfo.Shoulder
+        TrainingInfo.Back.parts -> TrainingInfo.Back
+        TrainingInfo.Abdominal.parts -> TrainingInfo.Abdominal
+        TrainingInfo.Leg.parts -> TrainingInfo.Leg
+        else -> TrainingInfo.Other
+    }
 }
+
+//fun sampleGenerateTraining(): List<TrainingMenu> = buildList {
+//    val currentMonth = YearMonth.now()
+//
+//    //現在の月をマイナス、プラスで月を決めて日付を決めている使用方法
+//    //TODO:ここをRoomで保存、管理
+//    //中の値を変えることで日付や表示アイテムを指定できる
+//    currentMonth.atDay(17).also { date ->
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Chest,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Triceps,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//    }
+//
+//    currentMonth.atDay(22).also { date ->
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Back,
+//                listOf(
+//                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+//                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+//                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+//                    TrainingDetail("ダンベルフライ", "60", "2", "10"),
+//                )
+//            )
+//        )
+//
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Biceps,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//    }
+//
+//    currentMonth.atDay(3).also { date ->
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Abdominal,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//    }
+//
+//    currentMonth.atDay(12).also { date ->
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Shoulder,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//    }
+//
+//    currentMonth.plusMonths(1).atDay(13).also { date ->
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Leg,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Triceps,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//    }
+//
+//    currentMonth.minusMonths(1).atDay(9).also { date ->
+//        add(
+//            TrainingMenu(
+//                date,
+//                TrainingInfo.Triceps,
+//                listOf(TrainingDetail("ダンベルフライ", "60", "2", "10"))
+//            )
+//        )
+//    }
+//}
