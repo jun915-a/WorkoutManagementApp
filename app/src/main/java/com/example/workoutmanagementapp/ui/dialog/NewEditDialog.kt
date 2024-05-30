@@ -1,4 +1,4 @@
-package com.example.workoutmanagementapp.ui
+package com.example.workoutmanagementapp.ui.dialog
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.R
-import com.example.workoutmanagementapp.Task
+import com.example.workoutmanagementapp.room.Task
 import com.example.workoutmanagementapp.addOrReplace
 import com.example.workoutmanagementapp.getDayList
 import com.example.workoutmanagementapp.getMonthList
@@ -51,13 +51,16 @@ import com.example.workoutmanagementapp.getSetList
 import com.example.workoutmanagementapp.getWeightList
 import com.example.workoutmanagementapp.getYearList
 import com.example.workoutmanagementapp.partList
+import com.example.workoutmanagementapp.ui.dataclass.TrainingDetail
+import com.example.workoutmanagementapp.ui.dataclass.TrainingInfo
+import com.example.workoutmanagementapp.ui.dataclass.TrainingMenuDatabase
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 
 
 @SuppressLint("StringFormatInvalid")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowEditDialog(
+fun ShowNewEditDialog(
     context: Context,
     tasks: MutableState<MutableList<TrainingMenuDatabase>>,
     viewModel: MainViewModel = hiltViewModel()
@@ -557,7 +560,7 @@ fun repSetPullDown(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     //weight
-    val selectedWeight = remember { mutableStateOf("0") }
+    val selectedWeight = remember { mutableStateOf("-") }
 
     //rep
     val selectedRep = remember { mutableStateOf("0") }

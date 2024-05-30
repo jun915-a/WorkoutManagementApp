@@ -13,9 +13,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.workoutmanagementapp.ui.ShowEditDialog
-import com.example.workoutmanagementapp.ui.TrainingDetail
-import com.example.workoutmanagementapp.ui.TrainingMenuDatabase
+import com.example.workoutmanagementapp.room.Task
+import com.example.workoutmanagementapp.ui.dialog.ShowNewEditDialog
+import com.example.workoutmanagementapp.ui.dataclass.TrainingDetail
+import com.example.workoutmanagementapp.ui.dataclass.TrainingMenuDatabase
+import com.example.workoutmanagementapp.ui.screen.MainScreen
 import com.example.workoutmanagementapp.ui.theme.WorkoutManagementAppTheme
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     MainScreen(tasks)
-                    ShowEditDialog(context = this, tasks)
+                    ShowNewEditDialog(context = this, tasks)
                 }
             }
         }

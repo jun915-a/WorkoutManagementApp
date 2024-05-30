@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
-import com.example.workoutmanagementapp.ui.TrainingInfo
+import com.example.workoutmanagementapp.ui.dataclass.TrainingInfo
 import com.kizitonwose.calendar.compose.CalendarLayoutInfo
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.core.CalendarMonth
@@ -44,7 +44,7 @@ fun getRepList(): List<String> {
 }
 
 fun getWeightList(): List<String> {
-    return (1..200).map { it.toString() }
+    return (0..200).map { if (it == 0) "-" else it.toString() }
 }
 
 fun getSetList(): List<String> {

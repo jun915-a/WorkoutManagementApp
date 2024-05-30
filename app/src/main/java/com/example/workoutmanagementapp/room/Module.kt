@@ -1,4 +1,4 @@
-package com.example.workoutmanagementapp
+package com.example.workoutmanagementapp.room
 
 import android.content.Context
 import androidx.room.Room

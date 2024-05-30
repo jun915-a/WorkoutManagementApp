@@ -1,4 +1,4 @@
-package com.example.workoutmanagementapp.ui
+package com.example.workoutmanagementapp.ui.dataclass
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.Color
@@ -56,6 +56,7 @@ data class TrainingInfo(
 }
 
 data class TrainingMenu(
+    val id: Int,
     val time: LocalDate?,
     val trainingInfo: TrainingInfo,
     val trainingDetailList: List<TrainingDetail>,
@@ -87,6 +88,7 @@ fun generateTraining(tasks: MutableState<MutableList<TrainingMenuDatabase>>): Li
             date.also { it ->
                 add(
                     TrainingMenu(
+                        task.id,
                         it,
                         trainingInfo,
                         task.trainingDetailList
@@ -113,8 +115,6 @@ fun checkParts(parts: String): TrainingInfo {
 //    val currentMonth = YearMonth.now()
 //
 //    //現在の月をマイナス、プラスで月を決めて日付を決めている使用方法
-//    //TODO:ここをRoomで保存、管理
-//    //中の値を変えることで日付や表示アイテムを指定できる
 //    currentMonth.atDay(17).also { date ->
 //        add(
 //            TrainingMenu(

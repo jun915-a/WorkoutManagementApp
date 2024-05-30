@@ -1,4 +1,4 @@
-package com.example.workoutmanagementapp
+package com.example.workoutmanagementapp.ui.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -34,14 +34,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.workoutmanagementapp.ui.TrainingDetail
-import com.example.workoutmanagementapp.ui.TrainingMenu
-import com.example.workoutmanagementapp.ui.TrainingMenuDatabase
-import com.example.workoutmanagementapp.ui.generateTraining
+import com.example.workoutmanagementapp.ui.calendar.SimpleCalendarTitle
+import com.example.workoutmanagementapp.displayText
+import com.example.workoutmanagementapp.getNowDate
+import com.example.workoutmanagementapp.rememberFirstCompletelyVisibleMonth
+import com.example.workoutmanagementapp.ui.dataclass.TrainingDetail
+import com.example.workoutmanagementapp.ui.dataclass.TrainingMenu
+import com.example.workoutmanagementapp.ui.dataclass.TrainingMenuDatabase
+import com.example.workoutmanagementapp.ui.dataclass.generateTraining
 import com.example.workoutmanagementapp.ui.theme.DayTextColor
 import com.example.workoutmanagementapp.ui.theme.ItemBgColor
 import com.example.workoutmanagementapp.ui.theme.Page_bg_color
@@ -255,7 +258,7 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun LazyItemScope.TrainingInformation(trainingMenu: TrainingMenu) {
+private fun LazyItemScope.TrainingInformation(trainingMenu: TrainingMenu, viewModel: MainViewModel = hiltViewModel()) {
     Row(
         modifier = Modifier
             .fillParentMaxWidth()
@@ -302,6 +305,8 @@ private fun LazyItemScope.TrainingInformation(trainingMenu: TrainingMenu) {
                 .weight(1f)
                 .clickable {
                     //todo メニュー編集ダイアログ表示
+                    viewModel.showEditDialogFlg = true
+                    println("test!!!A ${trainingMenu}")
                 }
                 .fillMaxHeight(),
         ) {

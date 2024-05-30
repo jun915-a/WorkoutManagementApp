@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.workoutmanagementapp.Task
-import com.example.workoutmanagementapp.TaskDao
+import com.example.workoutmanagementapp.room.Task
+import com.example.workoutmanagementapp.room.TaskDao
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
