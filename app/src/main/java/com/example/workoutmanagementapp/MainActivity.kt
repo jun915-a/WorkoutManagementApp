@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     MainScreen(tasks)
-                    ShowEditDialog(context = this)
+                    ShowEditDialog(context = this, tasks)
                 }
             }
         }
@@ -55,6 +55,8 @@ class MainActivity : ComponentActivity() {
         for (i in tasks) {
             trainingMenuList.add(viewModel.fromJson(i.jsonStr))
         }
+        viewModel.currentMaxId = tasks.size
+        println("test_log!!! ${viewModel.currentMaxId}")
         return trainingMenuList
     }
 
@@ -67,6 +69,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun samplePlay() {
         val obj = TrainingMenuDatabase(
+            1,
             "2024-04-01",
             "parts",
             listOf(TrainingDetail("a", "60", "1", "1")), "", ""

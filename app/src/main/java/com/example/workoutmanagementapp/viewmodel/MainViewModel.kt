@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
 //    var showDeleteDialogFlg by mutableStateOf(false)
 //    var showProgressBarFlg by mutableStateOf(false)
 
-    var id by mutableIntStateOf(0)
+    var currentMaxId by mutableIntStateOf(0)
     var memo by mutableStateOf("")
     var bodyWeight by mutableStateOf("")
     var day by mutableStateOf("")

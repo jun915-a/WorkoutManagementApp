@@ -37,7 +37,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,6 +59,7 @@ import com.example.workoutmanagementapp.viewmodel.MainViewModel
 @Composable
 fun ShowEditDialog(
     context: Context,
+    tasks: MutableState<MutableList<TrainingMenuDatabase>>,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     if (viewModel.showEditDialogFlg) {
@@ -188,7 +188,6 @@ fun ShowEditDialog(
                                     "kg",
                                     modifier = Modifier.align(Alignment.Bottom)
                                 )
-
                             }
                         }
                     }
@@ -214,7 +213,7 @@ fun ShowEditDialog(
 
                                 viewModel.parts = selectedParts.value
                                 println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
-                                saveTask(viewModel)
+                                saveTask(tasks, viewModel)
 
                                 viewModel.showEditDialogFlg = false
                                 Toast.makeText(
@@ -251,7 +250,8 @@ fun ShowEditDialog(
 /*
  * 登録処理
  */
-fun saveTask(viewModel: MainViewModel) {
+fun saveTask(tasks: MutableState<MutableList<TrainingMenuDatabase>>, viewModel: MainViewModel) {
+    println("test_log!A ${viewModel.currentMaxId}")
     val trainingDetail = mutableListOf<TrainingDetail>()
     for (i in viewModel.trainingName.indices) {
         trainingDetail.add(
@@ -264,6 +264,7 @@ fun saveTask(viewModel: MainViewModel) {
         )
     }
     val obj = TrainingMenuDatabase(
+        viewModel.currentMaxId + 1,
         viewModel.dataBaseDay,
         viewModel.parts,
         trainingDetail,
@@ -271,7 +272,7 @@ fun saveTask(viewModel: MainViewModel) {
         viewModel.bodyWeight
     )
     val jsonStr = viewModel.toJson(obj)
-    viewModel.insertTask(Task(1, jsonStr))
+    viewModel.insertTask(Task(viewModel.currentMaxId + 1, jsonStr))
 }
 
 @Composable

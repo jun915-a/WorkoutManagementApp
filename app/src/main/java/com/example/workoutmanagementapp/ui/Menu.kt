@@ -62,6 +62,7 @@ data class TrainingMenu(
 )
 
 data class TrainingMenuDatabase(
+    val id: Int,
     val date: String,
     val parts: String,
     val trainingDetailList: List<TrainingDetail>,
