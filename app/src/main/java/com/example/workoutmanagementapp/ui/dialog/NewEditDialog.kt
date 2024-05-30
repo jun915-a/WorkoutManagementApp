@@ -62,7 +62,6 @@ import com.example.workoutmanagementapp.viewmodel.MainViewModel
 @Composable
 fun ShowNewEditDialog(
     context: Context,
-    tasks: MutableState<MutableList<TrainingMenuDatabase>>,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     if (viewModel.showEditDialogFlg) {
@@ -291,7 +290,7 @@ fun AddTrainingMenu(
 
     Spacer(modifier = Modifier.height(10.dp))
     Text(text = context.getString(R.string.weight_rep_set_text))
-    newRepSetPullDown(count)
+    AddNewRepSetPullDown(count)
     Spacer(modifier = Modifier.height(10.dp))
 }
 
@@ -320,7 +319,7 @@ fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) 
                 .background(Color.White),
         ) {
             Text(
-                text = selectedParts.value.toString(),
+                text = selectedParts.value,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -425,7 +424,7 @@ fun DayPullDown(
     selectedYear: MutableState<String>,
     selectedMonth: MutableState<String>,
     selectedDay: MutableState<String>,
-    viewModel: MainViewModel = hiltViewModel()
+//    viewModel: MainViewModel = hiltViewModel()
 ) {
     var expandedYear by remember { mutableStateOf(false) }
     var expandedMonth by remember { mutableStateOf(false) }
@@ -555,7 +554,7 @@ fun DayPullDown(
 }
 
 @Composable
-fun newRepSetPullDown(
+fun AddNewRepSetPullDown(
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
@@ -574,17 +573,17 @@ fun newRepSetPullDown(
 
     addOrReplace(
         viewModel.weight,
-        count - 1,
+        count,
         selectedWeight.value
     )
     addOrReplace(
         viewModel.rep,
-        count - 1,
+        count,
         selectedRep.value
     )
     addOrReplace(
         viewModel.set,
-        count - 1,
+        count,
         selectedSet.value
     )
 

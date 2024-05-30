@@ -28,7 +28,6 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
     var trainingMenu: TrainingMenu? = null
 
 
-
 //    var showDeleteDialogFlg by mutableStateOf(false)
 //    var showProgressBarFlg by mutableStateOf(false)
 

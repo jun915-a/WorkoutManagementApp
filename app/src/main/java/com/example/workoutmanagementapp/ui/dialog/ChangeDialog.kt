@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,12 +42,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.R
 import com.example.workoutmanagementapp.addOrReplace
+import com.example.workoutmanagementapp.getRepList
 import com.example.workoutmanagementapp.getSetList
+import com.example.workoutmanagementapp.getWeightList
 import com.example.workoutmanagementapp.partList
 import com.example.workoutmanagementapp.room.Task
 import com.example.workoutmanagementapp.ui.dataclass.TrainingDetail
 import com.example.workoutmanagementapp.ui.dataclass.TrainingInfo
-import com.example.workoutmanagementapp.ui.dataclass.TrainingMenu
 import com.example.workoutmanagementapp.ui.dataclass.TrainingMenuDatabase
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 
@@ -117,13 +119,25 @@ fun ShowChangeDialog(
                         }
 
                         count?.let {
-                            items(it) {
-                                //種目、レップ、セット
-                                ChangeAddTrainingMenu(
-                                    context = context,
-                                    selectedParts,
-                                    count!!
-                                )
+                            items(it) { itemCount ->
+                                //種目、レップ、セット既存データ取得
+                                if (viewModel.trainingMenu?.trainingDetailList?.size!! > itemCount) {
+                                    ExChangeAddTrainingMenu(
+                                        context = context,
+                                        selectedParts = selectedParts,
+                                        count = itemCount
+                                    )
+                                }
+
+
+                                if (viewModel.trainingMenu?.trainingDetailList?.size!! <= itemCount) {
+                                    //種目、レップ、セット新規ボタンタップ時
+                                    AddChangeAddTrainingMenu(
+                                        context = context,
+                                        selectedParts,
+                                        count!!
+                                    )
+                                }
                                 Spacer(modifier = Modifier.height(20.dp))
                             }
                         }
@@ -202,7 +216,7 @@ fun ShowChangeDialog(
 
                                 viewModel.parts = selectedParts.value.toString()
                                 println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
-                                saveTask(viewModel)
+                                updateTask(viewModel)
 
                                 viewModel.showChangeDialogFlg = false
                                 Toast.makeText(
@@ -239,8 +253,7 @@ fun ShowChangeDialog(
 /*
  * 登録処理
  */
-fun saveTask(viewModel: MainViewModel) {
-    println("test_log!A ${viewModel.currentMaxId}")
+fun updateTask(viewModel: MainViewModel) {
     val trainingDetail = mutableListOf<TrainingDetail>()
     for (i in viewModel.trainingName.indices) {
         trainingDetail.add(
@@ -252,20 +265,40 @@ fun saveTask(viewModel: MainViewModel) {
             )
         )
     }
-    val obj = TrainingMenuDatabase(
-        viewModel.currentMaxId + 1,
-        viewModel.dataBaseDay,
-        viewModel.parts,
-        trainingDetail,
-        viewModel.memo,
-        viewModel.bodyWeight
-    )
-    val jsonStr = viewModel.toJson(obj)
-    viewModel.insertTask(Task(viewModel.currentMaxId + 1, jsonStr))
+    viewModel.trainingMenu?.id?.let {
+        val obj = TrainingMenuDatabase(
+            it,
+            viewModel.dataBaseDay,
+            viewModel.parts,
+            trainingDetail,
+            viewModel.memo,
+            viewModel.bodyWeight
+        )
+        val jsonStr = viewModel.toJson(obj)
+        viewModel.insertTask(Task(it, jsonStr))
+    }
 }
 
 @Composable
-fun ChangeAddTrainingMenu(
+fun ExChangeAddTrainingMenu(
+    context: Context,
+    selectedParts: MutableState<String?>,
+    count: Int,
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    val trainingDetail = viewModel.trainingMenu?.trainingDetailList?.get(count)
+    Text(text = context.getString(R.string.training_event))
+
+    ExChangeWorkoutMenuDropdown(trainingDetail, selectedParts, count)
+
+    Spacer(modifier = Modifier.height(10.dp))
+    Text(text = context.getString(R.string.weight_rep_set_text))
+    ExNewRepSetPullDown(trainingDetail, count)
+    Spacer(modifier = Modifier.height(10.dp))
+}
+
+@Composable
+fun AddChangeAddTrainingMenu(
     context: Context,
     selectedParts: MutableState<String?>,
     count: Int,
@@ -273,11 +306,11 @@ fun ChangeAddTrainingMenu(
     Text(text = context.getString(R.string.training_event))
 
     //When分で部位によって分岐
-    ChangeWorkoutMenuDropdown(selectedParts, count)
+    AddChangeWorkoutMenuDropdown(selectedParts, count)
 
     Spacer(modifier = Modifier.height(10.dp))
     Text(text = context.getString(R.string.weight_rep_set_text))
-    newRepSetPullDown(count)
+    AddNewRepSetPullDown(count)
     Spacer(modifier = Modifier.height(10.dp))
 }
 
@@ -319,9 +352,11 @@ fun ChangePartsDropdown(partsList: List<String>, selectedParts: MutableState<Str
     }
 }
 
-//種目
+/*
+ *種目 新規追加
+ */
 @Composable
-fun ChangeWorkoutMenuDropdown(
+fun AddChangeWorkoutMenuDropdown(
     selectedParts: MutableState<String?>,
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
@@ -333,7 +368,7 @@ fun ChangeWorkoutMenuDropdown(
     var expanded by remember { mutableStateOf(false) }
     addOrReplace(
         viewModel.trainingName,
-        count - 1,
+        count,
         selectedWorkout.value
     )
     val workoutMenu: List<String> = when (selectedParts.value) {
@@ -406,290 +441,247 @@ fun ChangeWorkoutMenuDropdown(
     }
 }
 
-//@Composable
-//fun DayPullDown(
-//    selectedYear: MutableState<String>,
-//    selectedMonth: MutableState<String>,
-//    selectedDay: MutableState<String>,
-//    viewModel: MainViewModel = hiltViewModel()
-//) {
-//    var expandedYear by remember { mutableStateOf(false) }
-//    var expandedMonth by remember { mutableStateOf(false) }
-//    var expandedDay by remember { mutableStateOf(false) }
-//
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        //年
-//        Column {
-//            TextButton(
-//                onClick = { expandedYear = true },
-//                modifier = Modifier
-//                    .background(Color.White)
-//            ) {
-//                Text(selectedYear.value)
-//                Spacer(modifier = Modifier.width(4.dp))
-//
-//                Icon(
-//                    painter = painterResource(id = android.R.drawable.arrow_down_float),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .size(6.dp)
-//                        .wrapContentWidth(Alignment.End)//右寄せ
-//                )
-//            }
-//            DropdownMenu(
-//                expanded = expandedYear,
-//                onDismissRequest = { expandedYear = false }
-//            ) {
-//                getYearList().forEach { selectYear ->
-//                    DropdownMenuItem(onClick = {
-//                        selectedYear.value = selectYear
-//                        expandedYear = false
-//                    }) {
-//                        Text(selectYear)
-//                    }
-//                }
-//            }
-//        }
-//        Text(
-//            text = "年",
-//            textAlign = TextAlign.Center,
-//        )
-//        Spacer(modifier = Modifier.weight(0.1f))
-//
-//        //月
-//        Column(
-//            modifier = Modifier
-//                .weight(1f),
-//        ) {
-//            TextButton(
-//                onClick = { expandedMonth = true },
-//                modifier = Modifier.background(Color.White)
-//            ) {
-//                Text(selectedMonth.value)
-//                Spacer(modifier = Modifier.weight(0.1f))
-//                Icon(
-//                    painter = painterResource(id = android.R.drawable.arrow_down_float),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .size(6.dp)
-//                        .wrapContentWidth(Alignment.End)//右寄せ
-//                )
-//            }
-//            DropdownMenu(
-//                expanded = expandedMonth,
-//                onDismissRequest = { expandedMonth = false }
-//            ) {
-//                getMonthList().forEach { option ->
-//                    DropdownMenuItem(onClick = {
-//                        selectedMonth.value = option
-//                        expandedMonth = false
-//                    }) {
-//                        Text(option)
-//                    }
-//                }
-//            }
-//        }
-//        Text(
-//            text = "月",
-//            textAlign = TextAlign.Center,
-//        )
-//        Spacer(modifier = Modifier.weight(0.1f))
-//
-//        //日・セット
-//        Column(
-//            modifier = Modifier
-//                .weight(1f)
-//        ) {
-//            TextButton(
-//                onClick = { expandedDay = true },
-//                modifier = Modifier
-//                    .background(Color.White),
-//
-//                ) {
-//                Text(selectedDay.value)
-//                Spacer(modifier = Modifier.weight(0.1f))
-//                Icon(
-//                    painter = painterResource(id = android.R.drawable.arrow_down_float),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .size(6.dp)
-//                        .wrapContentWidth(Alignment.End)//右寄せ
-//                )
-//            }
-//            DropdownMenu(
-//                expanded = expandedDay,
-//                onDismissRequest = { expandedDay = false },
-//            ) {
-//                getDayList().forEach { option ->
-//                    DropdownMenuItem(onClick = {
-//                        selectedDay.value = option
-//                        expandedDay = false
-//                    }) {
-//                        Text(option)
-//                    }
-//                }
-//            }
-//        }
-//        Text(
-//            text = "日",
-//            textAlign = TextAlign.End
-//        )
-//        Spacer(modifier = Modifier.weight(0.1f))
-//    }
-//}
+/*
+ *種目 新規追加
+ */
+@Composable
+fun ExChangeWorkoutMenuDropdown(
+    trainingDetail: TrainingDetail?,
+    selectedParts: MutableState<String?>,
+    count: Int,
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    //種目
+    val selectedWorkout = remember { mutableStateOf(trainingDetail?.trainingName) }
+    var expanded by remember { mutableStateOf(false) }
+    selectedWorkout.value?.let {
+        addOrReplace(
+            viewModel.trainingName,
+            count,
+            it
+        )
+    }
+    val workoutMenu: List<String> = when (selectedParts.value) {
+        TrainingInfo.Chest.parts -> {
+            TrainingInfo.Chest.workoutMenu
+        }
 
-//@Composable
-//fun repSetPullDown(
-//    count: Int,
-//    viewModel: MainViewModel = hiltViewModel()
-//) {
-//    //weight
-//    val selectedWeight = remember { mutableStateOf("-") }
-//
-//    //rep
-//    val selectedRep = remember { mutableStateOf("0") }
-//
-//    //set
-//    val selectedSet = remember { mutableStateOf("0") }
-//
-//    var expandedWeight by remember { mutableStateOf(false) }
-//    var expandedRep by remember { mutableStateOf(false) }
-//    var expandedSet by remember { mutableStateOf(false) }
-//
-//    addOrReplace(
-//        viewModel.weight,
-//        count - 1,
-//        selectedWeight.value
-//    )
-//    addOrReplace(
-//        viewModel.rep,
-//        count - 1,
-//        selectedRep.value
-//    )
-//    addOrReplace(
-//        viewModel.set,
-//        count - 1,
-//        selectedSet.value
-//    )
-//
-//    Row(
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        //重量
-//        Column(
-//            modifier = Modifier
-//                .weight(1f),
-//        ) {
-//            TextButton(
-//                onClick = { expandedWeight = true },
-//                modifier = Modifier.background(Color.White)
-//            ) {
-//                Text(selectedWeight.value)
-//                Spacer(modifier = Modifier.weight(0.1f))
-//                Icon(
-//                    painter = painterResource(id = android.R.drawable.arrow_down_float),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .size(6.dp)
-//                        .wrapContentWidth(Alignment.End)//右寄せ
-//                )
-//            }
-//
-//            DropdownMenu(
-//                expanded = expandedWeight,
-//                onDismissRequest = { expandedWeight = false }
-//            ) {
-//                getWeightList().forEach { option ->
-//                    DropdownMenuItem(onClick = {
-//                        selectedWeight.value = option
-//                        expandedWeight = false
-//                    }) {
-//                        Text(option)
-//                    }
-//                }
-//            }
-//        }
-//        Text(text = "kg", textAlign = TextAlign.Center, fontSize = 12.sp)
-//        Spacer(modifier = Modifier.weight(0.1f))
-//        //レップ
-//        Column(
-//            modifier = Modifier
-//                .weight(1f),
-//        ) {
-//            TextButton(
-//                onClick = { expandedRep = true },
-//                modifier = Modifier.background(Color.White)
-//            ) {
-//                Text(selectedRep.value)
-//                Spacer(modifier = Modifier.weight(0.1f))
-//                Icon(
-//                    painter = painterResource(id = android.R.drawable.arrow_down_float),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .size(6.dp)
-//                        .wrapContentWidth(Alignment.End)//右寄せ
-//                )
-//            }
-//
-//            DropdownMenu(
-//                expanded = expandedRep,
-//                onDismissRequest = { expandedRep = false }
-//            ) {
-//                getRepList().forEach { option ->
-//                    DropdownMenuItem(onClick = {
-//                        selectedRep.value = option
-//                        expandedRep = false
-//                    }) {
-//                        Text(option)
-//                    }
-//                }
-//            }
-//        }
-//        Text(text = "レップ", textAlign = TextAlign.Center, fontSize = 12.sp)
-//        Spacer(modifier = Modifier.weight(0.1f))
-//
-//        //日・セット
-//        Column(
-//            modifier = Modifier
-//                .weight(1f)
-//        ) {
-//            TextButton(
-//                onClick = { expandedSet = true },
-//                modifier = Modifier
-//                    .background(Color.White),
-//
-//                ) {
-//                Text(selectedSet.value)
-//                Spacer(modifier = Modifier.weight(0.1f))
-//                Icon(
-//                    painter = painterResource(id = android.R.drawable.arrow_down_float),
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .size(6.dp)
-//                        .wrapContentWidth(Alignment.End)//右寄せ
-//                )
-//            }
-//            DropdownMenu(
-//                expanded = expandedSet,
-//                onDismissRequest = { expandedSet = false },
-//            ) {
-//                getSetList().forEach { option ->
-//                    DropdownMenuItem(onClick = {
-//                        selectedSet.value = option
-//                        expandedSet = false
-//                    }) {
-//                        Text(option)
-//                    }
-//                }
-//            }
-//        }
-//        Text(
-//            text = "セット",
-//            textAlign = TextAlign.End,
-//            fontSize = 12.sp
-//        )
-//        Spacer(modifier = Modifier.weight(0.1f))
-//    }
-//}
+        TrainingInfo.Biceps.parts -> {
+            TrainingInfo.Biceps.workoutMenu
+        }
+
+        TrainingInfo.Triceps.parts -> {
+            TrainingInfo.Triceps.workoutMenu
+        }
+
+        TrainingInfo.Shoulder.parts -> {
+            TrainingInfo.Shoulder.workoutMenu
+        }
+
+        TrainingInfo.Back.parts -> {
+            TrainingInfo.Back.workoutMenu
+        }
+
+        TrainingInfo.Abdominal.parts -> {
+            TrainingInfo.Abdominal.workoutMenu
+        }
+
+        TrainingInfo.Leg.parts -> {
+            TrainingInfo.Leg.workoutMenu
+        }
+
+        else -> {
+            listOf()
+        }
+    }
+
+    Column {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            if (selectedParts.value != "選択してください") {
+                workoutMenu.forEach { workout ->
+                    DropdownMenuItem(onClick = {
+                        selectedWorkout.value = workout
+                        expanded = false
+                    }) {
+                        Text(text = workout)
+                    }
+                }
+            }
+        }
+        TextButton(
+            onClick = { expanded = true },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+        ) {
+            Text(
+                text = selectedWorkout.value.toString(),
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                painter = painterResource(id = android.R.drawable.arrow_down_float),
+                contentDescription = "",
+                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+            )
+        }
+    }
+}
+
+@Composable
+fun ExNewRepSetPullDown(
+    trainingDetail: TrainingDetail?,
+    count: Int,
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    //weight
+    val selectedWeight = remember { mutableStateOf(trainingDetail?.weight) }
+
+    //rep
+    val selectedRep = remember { mutableStateOf(trainingDetail?.rep) }
+
+    //set
+    val selectedSet = remember { mutableStateOf(trainingDetail?.set) }
+
+    var expandedWeight by remember { mutableStateOf(false) }
+    var expandedRep by remember { mutableStateOf(false) }
+    var expandedSet by remember { mutableStateOf(false) }
+
+    addOrReplace(
+        viewModel.weight,
+        count,
+        selectedWeight.value.toString()
+    )
+    addOrReplace(
+        viewModel.rep,
+        count,
+        selectedRep.value.toString()
+    )
+    addOrReplace(
+        viewModel.set,
+        count,
+        selectedSet.value.toString()
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        //重量
+        Column(
+            modifier = Modifier
+                .weight(1f),
+        ) {
+            TextButton(
+                onClick = { expandedWeight = true },
+                modifier = Modifier.background(Color.White)
+            ) {
+                Text(selectedWeight.value.toString())
+                Spacer(modifier = Modifier.weight(0.1f))
+                androidx.compose.material3.Icon(
+                    painter = painterResource(id = android.R.drawable.arrow_down_float),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(6.dp)
+                        .wrapContentWidth(Alignment.End)//右寄せ
+                )
+            }
+
+            androidx.compose.material.DropdownMenu(
+                expanded = expandedWeight,
+                onDismissRequest = { expandedWeight = false }
+            ) {
+                getWeightList().forEach { option ->
+                    DropdownMenuItem(onClick = {
+                        selectedWeight.value = option
+                        expandedWeight = false
+                    }) {
+                        Text(option)
+                    }
+                }
+            }
+        }
+        Text(text = "kg", textAlign = TextAlign.Center, fontSize = 12.sp)
+        Spacer(modifier = Modifier.weight(0.1f))
+        //レップ
+        Column(
+            modifier = Modifier
+                .weight(1f),
+        ) {
+            TextButton(
+                onClick = { expandedRep = true },
+                modifier = Modifier.background(Color.White)
+            ) {
+                Text(selectedRep.value.toString())
+                Spacer(modifier = Modifier.weight(0.1f))
+                androidx.compose.material3.Icon(
+                    painter = painterResource(id = android.R.drawable.arrow_down_float),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(6.dp)
+                        .wrapContentWidth(Alignment.End)//右寄せ
+                )
+            }
+
+            androidx.compose.material.DropdownMenu(
+                expanded = expandedRep,
+                onDismissRequest = { expandedRep = false }
+            ) {
+                getRepList().forEach { option ->
+                    DropdownMenuItem(onClick = {
+                        selectedRep.value = option
+                        expandedRep = false
+                    }) {
+                        Text(option)
+                    }
+                }
+            }
+        }
+        Text(text = "レップ", textAlign = TextAlign.Center, fontSize = 12.sp)
+        Spacer(modifier = Modifier.weight(0.1f))
+
+        //日・セット
+        Column(
+            modifier = Modifier
+                .weight(1f)
+        ) {
+            TextButton(
+                onClick = { expandedSet = true },
+                modifier = Modifier
+                    .background(Color.White),
+
+                ) {
+                Text(selectedSet.value.toString())
+                Spacer(modifier = Modifier.weight(0.1f))
+                androidx.compose.material3.Icon(
+                    painter = painterResource(id = android.R.drawable.arrow_down_float),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .size(6.dp)
+                        .wrapContentWidth(Alignment.End)//右寄せ
+                )
+            }
+            androidx.compose.material.DropdownMenu(
+                expanded = expandedSet,
+                onDismissRequest = { expandedSet = false },
+            ) {
+                getSetList().forEach { option ->
+                    DropdownMenuItem(onClick = {
+                        selectedSet.value = option
+                        expandedSet = false
+                    }) {
+                        Text(option)
+                    }
+                }
+            }
+        }
+        Text(
+            text = "セット",
+            textAlign = TextAlign.End,
+            fontSize = 12.sp
+        )
+        Spacer(modifier = Modifier.weight(0.1f))
+    }
+}

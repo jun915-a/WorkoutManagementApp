@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     MainScreen(context = applicationContext,tasks)
-                    ShowNewEditDialog(context = this, tasks)
+                    ShowNewEditDialog(context = this)
                 }
             }
         }
