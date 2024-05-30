@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                             println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
                         }
                     }
-                    MainScreen(tasks)
+                    MainScreen(context = applicationContext,tasks)
                     ShowNewEditDialog(context = this, tasks)
                 }
             }

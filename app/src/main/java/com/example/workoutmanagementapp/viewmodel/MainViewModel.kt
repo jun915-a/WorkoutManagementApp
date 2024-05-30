@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.workoutmanagementapp.room.Task
 import com.example.workoutmanagementapp.room.TaskDao
+import com.example.workoutmanagementapp.ui.dataclass.TrainingMenu
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -16,7 +17,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewModel() {
+
+    //新規アイテム追加
     var showEditDialogFlg by mutableStateOf(false)
+
+    //既存アイテム編集
+    var showChangeDialogFlg by mutableStateOf(false)
+
+    //既存アイテム編集時データ
+    var trainingMenu: TrainingMenu? = null
+
+
+
 //    var showDeleteDialogFlg by mutableStateOf(false)
 //    var showProgressBarFlg by mutableStateOf(false)
 

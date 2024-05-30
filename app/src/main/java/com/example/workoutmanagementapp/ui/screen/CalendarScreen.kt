@@ -1,13 +1,13 @@
 package com.example.workoutmanagementapp.ui.screen
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -45,6 +45,7 @@ import com.example.workoutmanagementapp.ui.dataclass.TrainingDetail
 import com.example.workoutmanagementapp.ui.dataclass.TrainingMenu
 import com.example.workoutmanagementapp.ui.dataclass.TrainingMenuDatabase
 import com.example.workoutmanagementapp.ui.dataclass.generateTraining
+import com.example.workoutmanagementapp.ui.dialog.ShowChangeDialog
 import com.example.workoutmanagementapp.ui.theme.DayTextColor
 import com.example.workoutmanagementapp.ui.theme.ItemBgColor
 import com.example.workoutmanagementapp.ui.theme.Page_bg_color
@@ -66,9 +67,11 @@ import java.time.YearMonth
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    context: Context,
     tasks: MutableState<MutableList<TrainingMenuDatabase>>,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    ShowChangeDialog(context = context)
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -258,10 +261,10 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun LazyItemScope.TrainingInformation(trainingMenu: TrainingMenu, viewModel: MainViewModel = hiltViewModel()) {
+private fun TrainingInformation(trainingMenu: TrainingMenu, viewModel: MainViewModel = hiltViewModel()) {
     Row(
         modifier = Modifier
-            .fillParentMaxWidth()
+            .fillMaxWidth()
             .height(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
@@ -305,7 +308,8 @@ private fun LazyItemScope.TrainingInformation(trainingMenu: TrainingMenu, viewMo
                 .weight(1f)
                 .clickable {
                     //todo メニュー編集ダイアログ表示
-                    viewModel.showEditDialogFlg = true
+                    viewModel.trainingMenu = trainingMenu
+                    viewModel.showChangeDialogFlg = true
                     println("test!!!A ${trainingMenu}")
                 }
                 .fillMaxHeight(),

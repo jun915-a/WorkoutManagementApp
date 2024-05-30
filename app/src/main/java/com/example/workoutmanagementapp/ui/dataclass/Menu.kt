@@ -60,6 +60,8 @@ data class TrainingMenu(
     val time: LocalDate?,
     val trainingInfo: TrainingInfo,
     val trainingDetailList: List<TrainingDetail>,
+    val memo: String,
+    val bodyWeight: String
 )
 
 data class TrainingMenuDatabase(
@@ -85,13 +87,15 @@ fun generateTraining(tasks: MutableState<MutableList<TrainingMenuDatabase>>): Li
             val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d")
             val date = LocalDate.parse(task.date, inputFormatter)
 
-            date.also { it ->
+            date.also { date ->
                 add(
                     TrainingMenu(
                         task.id,
-                        it,
+                        date,
                         trainingInfo,
-                        task.trainingDetailList
+                        task.trainingDetailList,
+                        task.memo,
+                        task.bodyWeight
                     )
                 )
             }
