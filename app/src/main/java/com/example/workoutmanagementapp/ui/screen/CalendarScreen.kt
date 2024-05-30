@@ -261,7 +261,10 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun TrainingInformation(trainingMenu: TrainingMenu, viewModel: MainViewModel = hiltViewModel()) {
+private fun TrainingInformation(
+    trainingMenu: TrainingMenu,
+    viewModel: MainViewModel = hiltViewModel()
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -386,7 +389,7 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
         )
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = "${trainingDetail.set}セット",
+            text = "${trainingDetail.rep}レップ",
             textAlign = TextAlign.Center,
             fontSize = 10.sp,
             fontWeight = FontWeight.Black,
@@ -394,7 +397,7 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
         )
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = "${trainingDetail.rep}レップ",
+            text = "${trainingDetail.set}セット",
             textAlign = TextAlign.Center,
             fontSize = 10.sp,
             fontWeight = FontWeight.Black,

@@ -223,6 +223,9 @@ fun ShowNewEditDialog(
                                 context.getString(R.string.save_notion),
                                 Toast.LENGTH_SHORT
                             ).show()
+                            viewModel.trainingName = mutableListOf()
+                            viewModel.set = mutableListOf()
+                            viewModel.rep = mutableListOf()
                         } else {
                             Toast.makeText(
                                 context,
