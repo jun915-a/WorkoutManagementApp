@@ -7,7 +7,7 @@
     <string name="memo_title">メモ</string>
     <string name="weight_title">体重</string>
 
-    <string name="name_empty_error">aa</string>
+    <string name="empty_error">未選択項目があります。</string>
     <string name="save_notion">保存しました。</string>
     <string name="edit_cancel_notion">aa</string>
 

@@ -135,7 +135,7 @@ fun ShowChangeDialog(
                                     AddChangeAddTrainingMenu(
                                         context = context,
                                         selectedParts,
-                                        count!!
+                                        itemCount
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
@@ -146,6 +146,7 @@ fun ShowChangeDialog(
                                 //種目の追加ボタン
                                 TextButton(
                                     onClick = {
+                                        println("test_AAAZC${count}")
                                         count = count!! + 1
                                     }
                                 ) {
@@ -199,32 +200,37 @@ fun ShowChangeDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        when {
-                            //TODO 未入力項目でエラートースト表示
-//                            viewModel.userId.isEmpty() -> {
-//                                Toast.makeText(
-//                                    context,
-//                                    context.getString(R.string.name_empty_error),
-//                                    Toast.LENGTH_SHORT
-//                                )
-//                                    .show()
-//                            }
-
-                            else -> {
-                                viewModel.dataBaseDay =
-                                    selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
-
-                                viewModel.parts = selectedParts.value.toString()
-                                println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
-                                updateTask(viewModel)
-
-                                viewModel.showChangeDialogFlg = false
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.save_notion),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        var canSaveFlg = true
+                        for (training in viewModel.trainingName.indices) {
+                            println("testAAA!! ${viewModel.trainingName[training]} ${training}")
+                            if (viewModel.trainingName[training] == "選択してください" || viewModel.trainingName[training] == "部位を選択してください") {
+                                canSaveFlg = false
                             }
+                        }
+                        if (selectedParts.value == "選択してください") {
+                            canSaveFlg = false
+                        }
+
+                        if (canSaveFlg) {
+                            viewModel.dataBaseDay =
+                                selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
+
+                            viewModel.parts = selectedParts.value.toString()
+                            println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
+                            updateTask(viewModel)
+
+                            viewModel.showChangeDialogFlg = false
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.save_notion),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.empty_error),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 ) {
@@ -361,6 +367,7 @@ fun AddChangeWorkoutMenuDropdown(
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    println("test_AAAZ ${count}")
     //種目
     val selectedWorkout =
         if (selectedParts.value == "選択してください") remember { mutableStateOf("部位を選択してください") }
@@ -451,6 +458,8 @@ fun ExChangeWorkoutMenuDropdown(
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
+    println("test_AAAZA ${count}")
+
     //種目
     val selectedWorkout = remember { mutableStateOf(trainingDetail?.trainingName) }
     var expanded by remember { mutableStateOf(false) }
