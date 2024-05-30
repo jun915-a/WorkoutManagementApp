@@ -60,8 +60,6 @@ fun ShowChangeDialog(
     context: Context,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    println("test!!!A ${viewModel.trainingMenu}")
-
     if (viewModel.showChangeDialogFlg && viewModel.trainingMenu != null) {
         //年
         val selectedYear = remember {
@@ -146,7 +144,6 @@ fun ShowChangeDialog(
                                 //種目の追加ボタン
                                 TextButton(
                                     onClick = {
-                                        println("test_AAAZC${count}")
                                         count = count!! + 1
                                     }
                                 ) {
@@ -201,13 +198,12 @@ fun ShowChangeDialog(
                 TextButton(
                     onClick = {
                         var canSaveFlg = true
-                        for (training in viewModel.trainingName.indices) {
-                            println("testAAA!! ${viewModel.trainingName[training]} ${training}")
-                            if (viewModel.trainingName[training] == "選択してください" || viewModel.trainingName[training] == "部位を選択してください") {
+                        for (training in viewModel.trainingName) {
+                            if (training == "選択してください" || training == "部位を選択してください") {
                                 canSaveFlg = false
                             }
                         }
-                        if (selectedParts.value == "選択してください") {
+                        if (selectedParts.value == "選択してください" || viewModel.trainingName.size == 0) {
                             canSaveFlg = false
                         }
 
@@ -367,7 +363,6 @@ fun AddChangeWorkoutMenuDropdown(
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    println("test_AAAZ ${count}")
     //種目
     val selectedWorkout =
         if (selectedParts.value == "選択してください") remember { mutableStateOf("部位を選択してください") }
@@ -458,8 +453,6 @@ fun ExChangeWorkoutMenuDropdown(
     count: Int,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    println("test_AAAZA ${count}")
-
     //種目
     val selectedWorkout = remember { mutableStateOf(trainingDetail?.trainingName) }
     var expanded by remember { mutableStateOf(false) }

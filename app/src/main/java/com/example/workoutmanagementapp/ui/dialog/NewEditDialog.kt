@@ -198,6 +198,38 @@ fun ShowNewEditDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
+                        var canSaveFlg = true
+                        for (training in viewModel.trainingName) {
+                            if (training == "選択してください" || training == "部位を選択してください") {
+                                canSaveFlg = false
+                            }
+                        }
+                        if (selectedParts.value == "選択してください" || viewModel.trainingName.size == 0) {
+                            canSaveFlg = false
+                        }
+
+
+                        if (canSaveFlg) {
+                            viewModel.dataBaseDay =
+                                selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
+
+                            viewModel.parts = selectedParts.value
+                            println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
+                            newSaveTask(viewModel)
+
+                            viewModel.showEditDialogFlg = false
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.save_notion),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.empty_error),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                         when {
                             //TODO 未入力項目でエラートースト表示
 //                            viewModel.userId.isEmpty() -> {
@@ -210,19 +242,7 @@ fun ShowNewEditDialog(
 //                            }
 
                             else -> {
-                                viewModel.dataBaseDay =
-                                    selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
 
-                                viewModel.parts = selectedParts.value
-                                println("test_log 日付：${viewModel.day} パーツ：${selectedParts.value} トレーニング：${viewModel.trainingName} レップ：${viewModel.rep} セット：${viewModel.set}")
-                                newSaveTask(viewModel)
-
-                                viewModel.showEditDialogFlg = false
-                                Toast.makeText(
-                                    context,
-                                    context.getString(R.string.save_notion),
-                                    Toast.LENGTH_SHORT
-                                ).show()
                             }
                         }
                     }
