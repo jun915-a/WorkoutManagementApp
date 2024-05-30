@@ -31,16 +31,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val items = remember { mutableStateOf(mutableListOf<TrainingMenuDatabase>()) }
+                    //tasks管理変数
+                    val tasks = remember { mutableStateOf(mutableListOf<TrainingMenuDatabase>()) }
 
-                    items.value = getTaskList()
-                    for (i in items.value) {
+                    tasks.value = getTaskList()
+                    for (i in tasks.value) {
                         println("test_log_起動時取得データ 日付：${i.date} 部位：${i.parts} 体重：${i.bodyWeight} メモ：${i.memo} ")
                         for (detail in i.trainingDetailList) {
                             println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
                         }
                     }
-                    MainScreen(items)
+                    MainScreen(tasks)
                     ShowEditDialog(context = this)
                 }
             }

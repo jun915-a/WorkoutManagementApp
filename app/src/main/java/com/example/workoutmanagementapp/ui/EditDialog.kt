@@ -44,42 +44,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.R
 import com.example.workoutmanagementapp.Task
 import com.example.workoutmanagementapp.addOrReplace
+import com.example.workoutmanagementapp.getDayList
+import com.example.workoutmanagementapp.getMonthList
 import com.example.workoutmanagementapp.getNowDate
+import com.example.workoutmanagementapp.getRepList
+import com.example.workoutmanagementapp.getSetList
+import com.example.workoutmanagementapp.getWeightList
+import com.example.workoutmanagementapp.getYearList
+import com.example.workoutmanagementapp.partList
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 
-val partList = listOf(
-    TrainingInfo.Chest.parts,
-    TrainingInfo.Biceps.parts,
-    TrainingInfo.Triceps.parts,
-    TrainingInfo.Shoulder.parts,
-    TrainingInfo.Back.parts,
-    TrainingInfo.Abdominal.parts,
-    TrainingInfo.Leg.parts,
-)
-
-fun getYearList(): List<String> {
-    return (2024..2034).map { it.toString() }
-}
-
-fun getMonthList(): List<String> {
-    return (1..12).map { it.toString() }
-}
-
-fun getDayList(): List<String> {
-    return (1..31).map { it.toString() }
-}
-
-fun getRepList(): List<String> {
-    return (1..50).map { it.toString() }
-}
-
-fun getWeightList(): List<String> {
-    return (1..200).map { it.toString() }
-}
-
-fun getSetList(): List<String> {
-    return (1..10).map { it.toString() }
-}
 
 @SuppressLint("StringFormatInvalid")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -224,6 +198,7 @@ fun ShowEditDialog(
                 TextButton(
                     onClick = {
                         when {
+                            //TODO 未入力項目でエラートースト表示
 //                            viewModel.userId.isEmpty() -> {
 //                                Toast.makeText(
 //                                    context,
@@ -234,9 +209,6 @@ fun ShowEditDialog(
 //                            }
 
                             else -> {
-                                //登録処理
-//                                viewModel.updateTask(task)
-
                                 viewModel.dataBaseDay =
                                     selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
 
@@ -276,6 +248,9 @@ fun ShowEditDialog(
     }
 }
 
+/*
+ * 登録処理
+ */
 fun saveTask(viewModel: MainViewModel) {
     val trainingDetail = mutableListOf<TrainingDetail>()
     for (i in viewModel.trainingName.indices) {
@@ -311,12 +286,9 @@ fun AddTrainingMenu(
     WorkoutMenuDropdown(selectedParts, count)
 
     Spacer(modifier = Modifier.height(10.dp))
-
-    Text(text = context.getString(R.string.rep_set_value))
+    Text(text = context.getString(R.string.weight_rep_set_text))
     repSetPullDown(count)
     Spacer(modifier = Modifier.height(10.dp))
-
-
 }
 
 
@@ -454,7 +426,6 @@ fun DayPullDown(
     var expandedYear by remember { mutableStateOf(false) }
     var expandedMonth by remember { mutableStateOf(false) }
     var expandedDay by remember { mutableStateOf(false) }
-
 
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -731,11 +702,4 @@ fun repSetPullDown(
         )
         Spacer(modifier = Modifier.weight(0.1f))
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-@Preview
-fun Test() {
-
 }

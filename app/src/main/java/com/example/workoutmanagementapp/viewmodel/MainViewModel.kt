@@ -33,8 +33,14 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
     var set: MutableList<String> = mutableListOf()
 
 
+    /*
+     * アプリ起動時taskを全件取得
+     */
     val tasks = taskDao.loadAllTasks().distinctUntilChanged()
 
+    /*
+     * 保存ボタン押下時taskを保存
+     */
     fun insertTask(task: Task) {
         viewModelScope.launch {
             taskDao.insertTask(task)
@@ -42,6 +48,9 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
         }
     }
 
+    /*
+     * 編集モードから保存した際のアップデート
+     */
     fun updateTask(task: Task) {
         viewModelScope.launch {
             taskDao.updateTask(task)
@@ -55,6 +64,9 @@ class MainViewModel @Inject constructor(private val taskDao: TaskDao) : ViewMode
         }
     }
 
+    /*
+     * TODO　カレンダー下部のアイテム長押しで削除
+     */
     fun deleteTask(task: Task) {
         viewModelScope.launch {
             taskDao.deleteTask(task)

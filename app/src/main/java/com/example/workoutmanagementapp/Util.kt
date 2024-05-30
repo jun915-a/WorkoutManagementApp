@@ -16,6 +16,41 @@ import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
+
+val partList = listOf(
+    TrainingInfo.Chest.parts,
+    TrainingInfo.Biceps.parts,
+    TrainingInfo.Triceps.parts,
+    TrainingInfo.Shoulder.parts,
+    TrainingInfo.Back.parts,
+    TrainingInfo.Abdominal.parts,
+    TrainingInfo.Leg.parts,
+)
+
+fun getYearList(): List<String> {
+    return (2024..2034).map { it.toString() }
+}
+
+fun getMonthList(): List<String> {
+    return (1..12).map { it.toString() }
+}
+
+fun getDayList(): List<String> {
+    return (1..31).map { it.toString() }
+}
+
+fun getRepList(): List<String> {
+    return (1..50).map { it.toString() }
+}
+
+fun getWeightList(): List<String> {
+    return (1..200).map { it.toString() }
+}
+
+fun getSetList(): List<String> {
+    return (1..10).map { it.toString() }
+}
+
 fun addOrReplace(list: MutableList<String>, index: Int, element: String) {
     if (index < list.size) {
         list[index] = element // 既存のインデックスに上書き
@@ -23,6 +58,7 @@ fun addOrReplace(list: MutableList<String>, index: Int, element: String) {
         list.add(element) // インデックスが範囲外の場合は追加
     }
 }
+
 fun addOrReplaceT(list: MutableList<TrainingInfo>, index: Int, element: TrainingInfo) {
     if (index < list.size) {
         list[index] = element // 既存のインデックスに上書き
@@ -30,6 +66,7 @@ fun addOrReplaceT(list: MutableList<TrainingInfo>, index: Int, element: Training
         list.add(element) // インデックスが範囲外の場合は追加
     }
 }
+
 fun getNowDate(): LocalDateTime? {
     return LocalDateTime.now()
 }

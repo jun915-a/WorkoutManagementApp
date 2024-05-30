@@ -346,30 +346,6 @@ fun bottomList(training: TrainingMenu) {
                 TrainingMenuList(it)
             }
         }
-//        Column(
-//            modifier = Modifier
-//                .weight(0.7f)
-//                .fillMaxHeight(),
-//            verticalArrangement = Arrangement.Center,
-//        ) {
-//            Text(
-//                modifier = Modifier.fillMaxWidth(),
-//                text = training.trainingName,
-//                textAlign = TextAlign.Center,
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.Black,
-//                color = DayTextColor
-//            )
-//            Text(
-//                modifier = Modifier.fillMaxWidth(),
-//                text = training.trainingName,
-//                textAlign = TextAlign.Center,
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.Light,
-//                color = DayTextColor
-//
-//            )
-//        }
     }
 }
 
@@ -384,10 +360,7 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
         verticalArrangement = Arrangement.Center, // 縦方向に中央揃え
     ) {
         Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-//                .fillMaxWidth()
-            ,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
             text = trainingDetail.trainingName,
             textAlign = TextAlign.Center,
             fontSize = 8.sp,
@@ -395,21 +368,15 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
             color = DayTextColor
         )
         Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-//                    .fillMaxWidth()
-            ,
-            text = "${trainingDetail.weight}セット",
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = "${trainingDetail.weight}kg",
             textAlign = TextAlign.Center,
             fontSize = 10.sp,
             fontWeight = FontWeight.Black,
             color = DayTextColor
         )
         Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-//                    .fillMaxWidth()
-            ,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
             text = "${trainingDetail.set}セット",
             textAlign = TextAlign.Center,
             fontSize = 10.sp,
@@ -417,10 +384,7 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
             color = DayTextColor
         )
         Text(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-//                    .fillMaxWidth()
-            ,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
             text = "${trainingDetail.rep}レップ",
             textAlign = TextAlign.Center,
             fontSize = 10.sp,
@@ -428,9 +392,4 @@ fun TrainingMenuList(trainingDetail: TrainingDetail) {
             color = DayTextColor
         )
     }
-}
-
-@Composable
-@Preview
-fun Test() {
 }
