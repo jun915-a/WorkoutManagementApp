@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,13 +56,14 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    tasks: MutableList<TrainingMenuDatabase>,
+    tasks: MutableState<MutableList<TrainingMenuDatabase>>,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     Scaffold(
@@ -84,10 +86,11 @@ fun MainScreen(
 
 @Composable
 fun CalendarScreen(
-    tasks: MutableList<TrainingMenuDatabase>,
+    tasks: MutableState<MutableList<TrainingMenuDatabase>>,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val trainings = generateTraining(tasks).groupBy { it.time }
+    var trainingMap by remember { mutableStateOf<Map<LocalDate?, List<TrainingMenu>>>(emptyMap()) }
+    trainingMap = generateTraining(tasks).groupBy { it.time }
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -96,7 +99,7 @@ fun CalendarScreen(
     val trainingInSelectedDate = remember {
         derivedStateOf {
             val date = selection?.date
-            if (date == null) emptyList() else trainings[date].orEmpty()
+            if (date == null) emptyList() else trainingMap[date].orEmpty()
         }
     }
     //    StatusBarColorUpdateEffect(toolbarColor)
@@ -143,7 +146,7 @@ fun CalendarScreen(
                 state = state,
                 dayContent = { day ->
                     val colors = if (day.position == DayPosition.MonthDate) {
-                        trainings[day.date].orEmpty().map { it.trainingInfo.color }
+                        trainingMap[day.date].orEmpty().map { it.trainingInfo.color }
                     } else {
                         emptyList()
                     }

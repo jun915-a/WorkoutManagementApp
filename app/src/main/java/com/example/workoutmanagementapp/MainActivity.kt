@@ -9,6 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.workoutmanagementapp.ui.ShowEditDialog
@@ -29,14 +31,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val tasks = getTaskList()
-                    for (i in tasks) {
+                    val items = remember { mutableStateOf(mutableListOf<TrainingMenuDatabase>()) }
+
+                    items.value = getTaskList()
+                    for (i in items.value) {
                         println("test_log_起動時取得データ 日付：${i.date} 部位：${i.parts} 体重：${i.bodyWeight} メモ：${i.memo} ")
                         for (detail in i.trainingDetailList) {
                             println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
                         }
                     }
-                    MainScreen(tasks)
+                    MainScreen(items)
                     ShowEditDialog(context = this)
                 }
             }
