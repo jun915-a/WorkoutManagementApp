@@ -71,7 +71,7 @@ fun ShowNewEditDialog(
         var localMonth = nowDate?.monthValue.toString()
         var localDay = nowDate?.dayOfMonth.toString()
 
-        //日付未洗濯でダイアログ表示
+        //日付未選択でダイアログ表示
         if (viewModel.day.isNotEmpty()) {
             localYear = viewModel.day.substring(0, 4)
             localMonth = viewModel.day.substring(5, 7)
@@ -165,7 +165,10 @@ fun ShowNewEditDialog(
                                 onValueChange = {
                                     viewModel.memo = it
                                 },
-                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    textColor = Color.Black,
+                                    containerColor = Color.White
+                                ),
                             )
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -184,7 +187,10 @@ fun ShowNewEditDialog(
                                         }
                                     },
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                    colors = TextFieldDefaults.textFieldColors(
+                                        textColor = Color.Black,
+                                        containerColor = Color.White
+                                    ),
                                 )
                                 Text(
                                     "kg",
@@ -331,7 +337,7 @@ fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) 
                     selectedParts.value = parts
                     expanded = false
                 }) {
-                    Text(text = parts)
+                    Text(text = parts, color = Color.Black)
                 }
             }
         }
@@ -349,7 +355,10 @@ fun PartsDropdown(partsList: List<String>, selectedParts: MutableState<String>) 
             Icon(
                 painter = painterResource(id = android.R.drawable.arrow_down_float),
                 contentDescription = "",
-                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                modifier = Modifier
+                    .size(6.dp)
+                    .wrapContentWidth(Alignment.End),//右寄せ
+                tint = Color.LightGray
             )
         }
     }
@@ -417,7 +426,7 @@ fun NewWorkoutMenuDropdown(
                         selectedWorkout.value = workout
                         expanded = false
                     }) {
-                        Text(text = workout)
+                        Text(text = workout, color = Color.Black)
                     }
                 }
             }
@@ -436,7 +445,10 @@ fun NewWorkoutMenuDropdown(
             Icon(
                 painter = painterResource(id = android.R.drawable.arrow_down_float),
                 contentDescription = "",
-                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                modifier = Modifier
+                    .size(6.dp)
+                    .wrapContentWidth(Alignment.End),//右寄せ
+                tint = Color.LightGray
             )
         }
     }
@@ -463,7 +475,7 @@ fun DayPullDown(
                 modifier = Modifier
                     .background(Color.White)
             ) {
-                Text(selectedYear.value)
+                Text(selectedYear.value, color = Color.Black, fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Icon(
@@ -471,7 +483,8 @@ fun DayPullDown(
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
             DropdownMenu(
@@ -483,7 +496,7 @@ fun DayPullDown(
                         selectedYear.value = selectYear
                         expandedYear = false
                     }) {
-                        Text(selectYear)
+                        Text(selectYear, color = Color.Black)
                     }
                 }
             }
@@ -503,14 +516,15 @@ fun DayPullDown(
                 onClick = { expandedMonth = true },
                 modifier = Modifier.background(Color.White)
             ) {
-                Text(selectedMonth.value)
+                Text(selectedMonth.value, color = Color.Black, fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
             DropdownMenu(
@@ -522,7 +536,7 @@ fun DayPullDown(
                         selectedMonth.value = option
                         expandedMonth = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }
@@ -533,7 +547,7 @@ fun DayPullDown(
         )
         Spacer(modifier = Modifier.weight(0.1f))
 
-        //日・セット
+        //日
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -544,14 +558,15 @@ fun DayPullDown(
                     .background(Color.White),
 
                 ) {
-                Text(selectedDay.value)
+                Text(selectedDay.value, color = Color.Black, fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
             DropdownMenu(
@@ -563,14 +578,14 @@ fun DayPullDown(
                         selectedDay.value = option
                         expandedDay = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }
         }
         Text(
             text = "日",
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
         )
         Spacer(modifier = Modifier.weight(0.1f))
     }
@@ -622,14 +637,15 @@ fun AddNewRepSetPullDown(
                 onClick = { expandedWeight = true },
                 modifier = Modifier.background(Color.White)
             ) {
-                Text(selectedWeight.value)
+                Text(selectedWeight.value, color = Color.Black, fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
 
@@ -642,7 +658,7 @@ fun AddNewRepSetPullDown(
                         selectedWeight.value = option
                         expandedWeight = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }
@@ -658,14 +674,15 @@ fun AddNewRepSetPullDown(
                 onClick = { expandedRep = true },
                 modifier = Modifier.background(Color.White)
             ) {
-                Text(selectedRep.value)
+                Text(selectedRep.value, color = Color.Black, fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
 
@@ -678,7 +695,7 @@ fun AddNewRepSetPullDown(
                         selectedRep.value = option
                         expandedRep = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }
@@ -697,14 +714,15 @@ fun AddNewRepSetPullDown(
                     .background(Color.White),
 
                 ) {
-                Text(selectedSet.value)
+                Text(selectedSet.value, color = Color.Black, fontWeight = FontWeight.Normal)
                 Spacer(modifier = Modifier.weight(0.1f))
                 Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
             DropdownMenu(
@@ -716,7 +734,7 @@ fun AddNewRepSetPullDown(
                         selectedSet.value = option
                         expandedSet = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }

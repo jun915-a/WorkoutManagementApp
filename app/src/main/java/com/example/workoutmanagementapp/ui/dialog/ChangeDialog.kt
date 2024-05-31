@@ -3,6 +3,8 @@ package com.example.workoutmanagementapp.ui.dialog
 import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.material3.Icon
+import androidx.compose.material.DropdownMenu
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,9 +18,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -164,7 +164,10 @@ fun ShowChangeDialog(
                                 onValueChange = {
                                     viewModel.memo = it
                                 },
-                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    textColor = Color.Black,
+                                    containerColor = Color.White
+                                ),
                             )
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -183,7 +186,10 @@ fun ShowChangeDialog(
                                         }
                                     },
                                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                    colors = TextFieldDefaults.textFieldColors(
+                                        textColor = Color.Black,
+                                        containerColor = Color.White
+                                    ),
                                 )
                                 Text(
                                     "kg",
@@ -333,7 +339,7 @@ fun ChangePartsDropdown(partsList: List<String>, selectedParts: MutableState<Str
                     selectedParts.value = parts
                     expanded = false
                 }) {
-                    Text(text = parts)
+                    Text(text = parts, color = Color.Black)
                 }
             }
         }
@@ -351,7 +357,10 @@ fun ChangePartsDropdown(partsList: List<String>, selectedParts: MutableState<Str
             Icon(
                 painter = painterResource(id = android.R.drawable.arrow_down_float),
                 contentDescription = "",
-                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                modifier = Modifier
+                    .size(6.dp)
+                    .wrapContentWidth(Alignment.End),//右寄せ
+                tint = Color.LightGray
             )
         }
     }
@@ -421,7 +430,7 @@ fun AddChangeWorkoutMenuDropdown(
                         selectedWorkout.value = workout
                         expanded = false
                     }) {
-                        Text(text = workout)
+                        Text(text = workout, color = Color.Black)
                     }
                 }
             }
@@ -440,7 +449,10 @@ fun AddChangeWorkoutMenuDropdown(
             Icon(
                 painter = painterResource(id = android.R.drawable.arrow_down_float),
                 contentDescription = "",
-                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                modifier = Modifier
+                    .size(6.dp)
+                    .wrapContentWidth(Alignment.End),//右寄せ
+                tint = Color.LightGray
             )
         }
     }
@@ -511,7 +523,7 @@ fun ExChangeWorkoutMenuDropdown(
                         selectedWorkout.value = workout
                         expanded = false
                     }) {
-                        Text(text = workout)
+                        Text(text = workout, color = Color.Black)
                     }
                 }
             }
@@ -530,7 +542,10 @@ fun ExChangeWorkoutMenuDropdown(
             Icon(
                 painter = painterResource(id = android.R.drawable.arrow_down_float),
                 contentDescription = "",
-                modifier = Modifier.wrapContentWidth(Alignment.End)//右寄せ
+                modifier = Modifier
+                    .size(6.dp)
+                    .wrapContentWidth(Alignment.End),//右寄せ
+                tint = Color.LightGray
             )
         }
     }
@@ -583,18 +598,23 @@ fun ExNewRepSetPullDown(
                 onClick = { expandedWeight = true },
                 modifier = Modifier.background(Color.White)
             ) {
-                Text(selectedWeight.value.toString())
+                Text(
+                    selectedWeight.value.toString(),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Normal
+                )
                 Spacer(modifier = Modifier.weight(0.1f))
-                androidx.compose.material3.Icon(
+                Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
 
-            androidx.compose.material.DropdownMenu(
+            DropdownMenu(
                 expanded = expandedWeight,
                 onDismissRequest = { expandedWeight = false }
             ) {
@@ -603,7 +623,7 @@ fun ExNewRepSetPullDown(
                         selectedWeight.value = option
                         expandedWeight = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }
@@ -619,18 +639,22 @@ fun ExNewRepSetPullDown(
                 onClick = { expandedRep = true },
                 modifier = Modifier.background(Color.White)
             ) {
-                Text(selectedRep.value.toString())
+                Text(
+                    selectedRep.value.toString(), color = Color.Black,
+                    fontWeight = FontWeight.Normal
+                )
                 Spacer(modifier = Modifier.weight(0.1f))
-                androidx.compose.material3.Icon(
+                Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
 
-            androidx.compose.material.DropdownMenu(
+            DropdownMenu(
                 expanded = expandedRep,
                 onDismissRequest = { expandedRep = false }
             ) {
@@ -639,7 +663,7 @@ fun ExNewRepSetPullDown(
                         selectedRep.value = option
                         expandedRep = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }
@@ -647,7 +671,7 @@ fun ExNewRepSetPullDown(
         Text(text = "レップ", textAlign = TextAlign.Center, fontSize = 12.sp)
         Spacer(modifier = Modifier.weight(0.1f))
 
-        //日・セット
+        //セット
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -658,17 +682,22 @@ fun ExNewRepSetPullDown(
                     .background(Color.White),
 
                 ) {
-                Text(selectedSet.value.toString())
+                Text(
+                    selectedSet.value.toString(),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Normal
+                )
                 Spacer(modifier = Modifier.weight(0.1f))
-                androidx.compose.material3.Icon(
+                Icon(
                     painter = painterResource(id = android.R.drawable.arrow_down_float),
                     contentDescription = "",
                     modifier = Modifier
                         .size(6.dp)
-                        .wrapContentWidth(Alignment.End)//右寄せ
+                        .wrapContentWidth(Alignment.End),//右寄せ
+                    tint = Color.LightGray
                 )
             }
-            androidx.compose.material.DropdownMenu(
+            DropdownMenu(
                 expanded = expandedSet,
                 onDismissRequest = { expandedSet = false },
             ) {
@@ -677,7 +706,7 @@ fun ExNewRepSetPullDown(
                         selectedSet.value = option
                         expandedSet = false
                     }) {
-                        Text(option)
+                        Text(option, color = Color.Black)
                     }
                 }
             }

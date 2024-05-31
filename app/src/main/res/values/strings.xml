@@ -9,7 +9,7 @@
 
     <string name="empty_error">未選択項目があります。</string>
     <string name="save_notion">保存しました。</string>
-    <string name="edit_cancel_notion">aa</string>
+    <string name="edit_cancel_notion">入力をキャンセルしました。</string>
 
 
 </resources>
