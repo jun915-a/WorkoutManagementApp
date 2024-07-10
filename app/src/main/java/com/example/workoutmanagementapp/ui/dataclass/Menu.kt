@@ -74,7 +74,7 @@ data class TrainingInfo(
 
         val Rest = TrainingInfo(
             "休み", Color.Black,
-            android.R.drawable.ic_menu_recent_history, mutableListOf("rest")
+            android.R.drawable.ic_menu_recent_history, mutableListOf("休み")
         )
 
     }
