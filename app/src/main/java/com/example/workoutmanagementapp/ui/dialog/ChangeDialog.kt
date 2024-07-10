@@ -213,6 +213,8 @@ fun ShowChangeDialog(
                             canSaveFlg = false
                         }
 
+                        if (selectedParts.value == "休み") canSaveFlg = true
+
                         if (canSaveFlg) {
                             viewModel.dataBaseDay =
                                 selectedYear.value + "-" + selectedMonth.value + "-" + selectedDay.value
@@ -230,7 +232,7 @@ fun ShowChangeDialog(
                             viewModel.trainingName = mutableListOf()
                             viewModel.set = mutableListOf()
                             viewModel.rep = mutableListOf()
-                        } else {
+                        } else if (selectedParts.value != "休み") {
                             Toast.makeText(
                                 context,
                                 context.getString(R.string.empty_error),
@@ -414,6 +416,10 @@ fun AddChangeWorkoutMenuDropdown(
             TrainingInfo.Leg.workoutMenu
         }
 
+        TrainingInfo.Rest.parts -> {
+            TrainingInfo.Rest.workoutMenu
+        }
+
         else -> {
             listOf()
         }
@@ -505,6 +511,10 @@ fun ExChangeWorkoutMenuDropdown(
 
         TrainingInfo.Leg.parts -> {
             TrainingInfo.Leg.workoutMenu
+        }
+
+        TrainingInfo.Rest.parts -> {
+            TrainingInfo.Rest.workoutMenu
         }
 
         else -> {

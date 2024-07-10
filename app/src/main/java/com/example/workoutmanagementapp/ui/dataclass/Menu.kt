@@ -8,11 +8,22 @@ import java.time.format.DateTimeFormatter
 
 class WorkoutMenu {
     companion object {
-        var bicepsMenu: MutableList<String> = mutableListOf("ダンベルカール", "ハンマーカール")
-        var tricepsMenu: MutableList<String> = mutableListOf("フレンチプレス", "ディップス", "キックバック")
+        var bicepsMenu: MutableList<String> =
+            mutableListOf("プリーチャカール", "ダンベルカール", "ハンマーカール", "ケーブルカール")
+        var tricepsMenu: MutableList<String> =
+            mutableListOf("フレンチプレス", "ディップス", "キックバック", "ケーブルトライセップスEXT")
         var shoulderMenu: MutableList<String> = mutableListOf("サイドレイズ", "ショルダープレス")
         var chestMenu: MutableList<String> =
-            mutableListOf("ダンベルフライ", "ダンベルプレス", "チェストプレス", "ベンチプレス")
+            mutableListOf(
+                "ベンチプレス",
+                "ダンベルフライ",
+                "ダンベルプレス",
+                "チェストプレス",
+                "ケーブルクロスオーバー",
+                "ペックフライ",
+                "インクラインチェストプレス",
+                "デクラインチェストプレス"
+            )
         var abdominalMenu: MutableList<String> = mutableListOf(
             "立ちコロ",
             "膝コロ",
@@ -20,9 +31,18 @@ class WorkoutMenu {
             "バイシクルクランチ",
             "プランク"
         )
-        var backMenu: MutableList<String> = mutableListOf("懸垂", "ラットプルダウン")
+        var backMenu: MutableList<String> =
+            mutableListOf("懸垂", "ラットプルダウン", "ローイング", "ワンハンドロー", "ベントオーバーロー", "デッドリフト")
         var legMenu: MutableList<String> =
-            mutableListOf("スクワット", "レッグプレス", "レッグエクステンション", "レッグカール", "ブルガリアンスクワット")
+            mutableListOf(
+                "スクワット",
+                "レッグプレス",
+                "レッグエクステンション",
+                "レッグカール",
+                "ブルガリアンスクワット",
+                "ヒップアダクション",
+                "ヒップアブダクション"
+            )
     }
 }
 
@@ -51,6 +71,11 @@ data class TrainingInfo(
         val Leg = TrainingInfo("足", Color.Cyan, R.drawable.leg, WorkoutMenu.legMenu)
 
         val Other = TrainingInfo("その他", Color.Black, null, mutableListOf())
+
+        val Rest = TrainingInfo(
+            "休み", Color.Black,
+            android.R.drawable.ic_menu_recent_history, mutableListOf("rest")
+        )
 
     }
 }
@@ -111,6 +136,7 @@ fun checkParts(parts: String): TrainingInfo {
         TrainingInfo.Back.parts -> TrainingInfo.Back
         TrainingInfo.Abdominal.parts -> TrainingInfo.Abdominal
         TrainingInfo.Leg.parts -> TrainingInfo.Leg
+        TrainingInfo.Rest.parts -> TrainingInfo.Rest
         else -> TrainingInfo.Other
     }
 }

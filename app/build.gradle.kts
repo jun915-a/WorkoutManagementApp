@@ -16,7 +16,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -70,8 +70,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation ("com.kizitonwose.calendar:compose:2.5.0")
-    implementation ("androidx.compose.material:material:1.6.6")
+    implementation("com.kizitonwose.calendar:compose:2.5.0")
+    implementation("androidx.compose.material:material:1.6.6")
     implementation("com.google.dagger:hilt-android:2.44")
     implementation("com.google.dagger:hilt-android-gradle-plugin:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")

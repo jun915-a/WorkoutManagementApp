@@ -25,6 +25,7 @@ val partList = listOf(
     TrainingInfo.Back.parts,
     TrainingInfo.Abdominal.parts,
     TrainingInfo.Leg.parts,
+    TrainingInfo.Rest.parts,
 )
 
 fun getYearList(): List<String> {

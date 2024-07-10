@@ -232,7 +232,7 @@ fun ShowNewEditDialog(
                             viewModel.trainingName = mutableListOf()
                             viewModel.set = mutableListOf()
                             viewModel.rep = mutableListOf()
-                        } else {
+                        } else if (selectedParts.value != "休み") {
                             Toast.makeText(
                                 context,
                                 context.getString(R.string.empty_error),
@@ -408,6 +408,10 @@ fun NewWorkoutMenuDropdown(
 
         TrainingInfo.Leg.parts -> {
             TrainingInfo.Leg.workoutMenu
+        }
+
+        TrainingInfo.Rest.parts -> {
+            TrainingInfo.Rest.workoutMenu
         }
 
         else -> {
