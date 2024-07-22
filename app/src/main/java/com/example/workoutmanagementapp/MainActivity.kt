@@ -21,6 +21,7 @@ import com.example.workoutmanagementapp.ui.screen.MainScreen
 import com.example.workoutmanagementapp.ui.theme.WorkoutManagementAppTheme
 import com.example.workoutmanagementapp.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,8 +44,16 @@ class MainActivity : ComponentActivity() {
                             println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
                         }
                     }
-                    MainScreen(context = applicationContext,tasks)
+                    MainScreen(context = applicationContext, tasks)
                     ShowNewEditDialog(context = this)
+
+                    //Test実装
+                    try {
+                        val number = getRandomNumber()
+                        println("Generated number: $number")
+                    } catch (e: Exception) {
+                        println("Exception caught: ${e.message}")
+                    }
                 }
             }
         }
@@ -85,5 +94,15 @@ class MainActivity : ComponentActivity() {
                 println("test_log_起動時取得データ_トレーニング詳細 トレーニング：${detail.trainingName} 重量：${detail.weight} レップ：${detail.rep} セット：${detail.set}")
             }
         }
+    }
+
+    fun getRandomNumber(): Int {
+        val randomNumber = Random.nextInt(0, 11)  // 0から10までのランダムな整数を生成
+
+        if (randomNumber == 10) {
+            throw Exception("Generated number is 10!")  // 例外をスローする
+        }
+
+        return randomNumber
     }
 }
